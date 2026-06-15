@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-const CARD_MIN_HEIGHT := 148.0
+const CARD_MIN_HEIGHT := 205.0
 const UPGRADE_CARD_WIDTH := 260.0
 const UPGRADE_CARD_HEIGHT := 360.0
 
@@ -86,11 +86,7 @@ func _build_top_hud() -> void:
 	_resource_label = _make_label(20, Color(0.92, 0.98, 1.0), HORIZONTAL_ALIGNMENT_CENTER)
 	_top_hud.add_child(_resource_label)
 
-	_wall_bar = _make_bar(Color(0.22, 0.92, 0.48), "城墙")
-	_energy_bar = _make_bar(Color(0.28, 0.66, 1.0), "能量")
 	_exp_bar = _make_bar(Color(0.92, 0.62, 1.0), "经验")
-	_top_hud.add_child(_wall_bar)
-	_top_hud.add_child(_energy_bar)
 	_top_hud.add_child(_exp_bar)
 
 	var pile_row := HBoxContainer.new()
@@ -111,7 +107,7 @@ func _build_hand_area() -> void:
 	_hand_panel.anchor_bottom = 1.0
 	_hand_panel.offset_left = 12.0
 	_hand_panel.offset_right = -12.0
-	_hand_panel.offset_top = -265.0
+	_hand_panel.offset_top = -365.0
 	_hand_panel.offset_bottom = -12.0
 	_hand_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.045, 0.058, 0.076, 0.92), Color(0.34, 0.58, 0.70, 0.76), 18))
 	root.add_child(_hand_panel)
@@ -124,8 +120,13 @@ func _build_hand_area() -> void:
 	_hand_panel.add_child(margin)
 
 	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 10)
+	layout.add_theme_constant_override("separation", 8)
 	margin.add_child(layout)
+
+	_wall_bar = _make_bar(Color(0.22, 0.92, 0.48), "城墙 HP")
+	_energy_bar = _make_bar(Color(0.28, 0.66, 1.0), "人物能量")
+	layout.add_child(_wall_bar)
+	layout.add_child(_energy_bar)
 
 	var title_row := HBoxContainer.new()
 	layout.add_child(title_row)
@@ -231,12 +232,7 @@ func _refresh_hand_area() -> void:
 			child.queue_free()
 		for i in hand.size():
 			var card: Dictionary = hand[i]
-			var button := Button.new()
-			button.custom_minimum_size = Vector2(0.0, CARD_MIN_HEIGHT)
-			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			button.text = "%s\n%d 费\n%s" % [String(card.get("name", "卡牌")), int(card.get("cost", 0)), String(card.get("text", ""))]
-			button.pressed.connect(func(index := i): PrototypeState.try_play_hand(index))
-			_style_button(button, _skill_color(String(card.get("skill", ""))), 15)
+			var button := _make_hand_card_button(card, i)
 			_hand_row.add_child(button)
 	for i in mini(hand.size(), _hand_row.get_child_count()):
 		var card: Dictionary = hand[i]
@@ -284,18 +280,83 @@ func _refresh_restart() -> void:
 
 func _make_bar(fill_color: Color, title: String) -> ProgressBar:
 	var bar := ProgressBar.new()
-	bar.custom_minimum_size = Vector2(0.0, 28.0)
+	bar.custom_minimum_size = Vector2(0.0, 30.0)
 	bar.show_percentage = false
 	bar.tooltip_text = title
 	bar.add_theme_stylebox_override("background", _panel_style(Color(0.02, 0.025, 0.032, 0.95), Color(0.18, 0.26, 0.30), 8))
 	bar.add_theme_stylebox_override("fill", _panel_style(fill_color, fill_color.lightened(0.25), 8))
+	var value_label := _make_label(14, Color(0.96, 1.0, 1.0), HORIZONTAL_ALIGNMENT_CENTER)
+	value_label.name = "ValueLabel"
+	value_label.anchor_right = 1.0
+	value_label.anchor_bottom = 1.0
+	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bar.add_child(value_label)
 	return bar
 
 
 func _set_bar(bar: ProgressBar, value: float, max_value: float, title: String) -> void:
 	bar.max_value = maxf(1.0, max_value)
 	bar.value = clampf(value, 0.0, bar.max_value)
-	bar.tooltip_text = "%s %.0f/%.0f" % [title, value, max_value]
+	var value_text := "%s %.0f/%.0f" % [title, value, max_value]
+	bar.tooltip_text = value_text
+	var value_label := bar.get_node_or_null("ValueLabel") as Label
+	if value_label != null:
+		value_label.text = value_text
+
+
+func _make_hand_card_button(card: Dictionary, index: int) -> Button:
+	var color := _skill_color(String(card.get("skill", "")))
+	var button := Button.new()
+	button.custom_minimum_size = Vector2(0.0, CARD_MIN_HEIGHT)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.text = ""
+	button.pressed.connect(func(): PrototypeState.try_play_hand(index))
+	_style_button(button, color, 14)
+
+	var content := VBoxContainer.new()
+	content.anchor_right = 1.0
+	content.anchor_bottom = 1.0
+	content.offset_left = 8.0
+	content.offset_top = 8.0
+	content.offset_right = -8.0
+	content.offset_bottom = -8.0
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_theme_constant_override("separation", 5)
+	button.add_child(content)
+
+	var header := HBoxContainer.new()
+	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_child(header)
+
+	var cost := _make_label(16, Color(1.0, 0.92, 0.64), HORIZONTAL_ALIGNMENT_CENTER)
+	cost.custom_minimum_size = Vector2(30.0, 28.0)
+	cost.text = str(int(card.get("cost", 0)))
+	cost.add_theme_stylebox_override("normal", _panel_style(Color(0.04, 0.08, 0.10, 0.98), Color(0.85, 0.98, 1.0), 14))
+	header.add_child(cost)
+
+	var name_label := _make_label(15, Color(0.96, 1.0, 1.0), HORIZONTAL_ALIGNMENT_LEFT)
+	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_label.text = String(card.get("name", "卡牌"))
+	header.add_child(name_label)
+
+	var art_panel := PanelContainer.new()
+	art_panel.custom_minimum_size = Vector2(0.0, 72.0)
+	art_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	art_panel.add_theme_stylebox_override("panel", _panel_style(color.darkened(0.35), color.lightened(0.55), 10))
+	content.add_child(art_panel)
+
+	var symbol := _make_label(34, color.lightened(0.78), HORIZONTAL_ALIGNMENT_CENTER)
+	symbol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	symbol.text = _skill_symbol(String(card.get("skill", "")))
+	symbol.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	art_panel.add_child(symbol)
+
+	var effect := _make_label(12, Color(0.82, 0.94, 0.98), HORIZONTAL_ALIGNMENT_LEFT)
+	effect.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	effect.text = String(card.get("text", ""))
+	content.add_child(effect)
+	return button
 
 
 func _make_label(font_size: int, color: Color, alignment: HorizontalAlignment) -> Label:
@@ -358,7 +419,7 @@ func _apply_responsive_layout() -> void:
 	if top_bar != null:
 		top_bar.columns = 1 if compact else 2
 	if _hand_panel != null:
-		_hand_panel.offset_top = -310.0 if compact else -265.0
+		_hand_panel.offset_top = -390.0 if compact else -365.0
 	if _upgrade_row != null:
 		_upgrade_row.add_theme_constant_override("separation", 10 if compact else 18)
 		for child in _upgrade_row.get_children():
@@ -380,3 +441,14 @@ func _skill_color(skill: String) -> Color:
 		"electro_pierce":
 			return Color(0.22, 0.12, 0.46)
 	return Color(0.16, 0.20, 0.25)
+
+
+func _skill_symbol(skill: String) -> String:
+	match skill:
+		"thermobaric":
+			return "炎"
+		"dry_ice":
+			return "冰"
+		"electro_pierce":
+			return "电"
+	return "技"
