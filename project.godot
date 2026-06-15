@@ -1,0 +1,46 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
+[application]
+
+config/name="Godot V1 Plus"
+run/main_scene="res://scenes/Game.tscn"
+config/features=PackedStringArray("4.6", "Mobile")
+
+[autoload]
+
+GameEvents="*res://src/game/GameEvents.gd"
+AchievementStore="*res://src/game/AchievementStore.gd"
+AssetRegistry="*res://src/game/AssetRegistry.gd"
+AudioDirector="*res://src/game/AudioDirector.gd"
+CJKFontSetup="*res://src/ui/CJKFontSetup.gd"
+ContentUnits="*res://src/game/ContentUnits.gd"
+EnvVFX="*res://addons/vfx_library/env_vfx.gd"
+FeedbackDirector="*res://src/game/FeedbackDirector.gd"
+ProgressStore="*res://src/game/ProgressStore.gd"
+PrototypeState="*res://src/game/PrototypeState.gd"
+VFX="*res://addons/vfx_library/vfx.gd"
+
+[display]
+
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/size/window_width_override=540
+window/size/window_height_override=960
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="mobile"

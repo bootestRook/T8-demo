@@ -1,0 +1,11 @@
+{
+  "demand_id": "",
+  "title": "",
+  "owner": "",
+  "sections": {
+    "todo": [],
+    "doing": [],
+    "done": [],
+    "future": []
+  }
+}

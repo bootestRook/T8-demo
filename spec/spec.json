@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "schema_version": "v2",
+    "generated_at": "2026-05-27T08:04:16.689608+00:00",
+    "source_type": "template",
+    "source_id": "godot-v1-plus",
+    "template_code": "godot-v1-plus",
+    "template_name": "Godot V1 Plus AI 游戏脚手架",
+    "plan_level": "standard"
+  },
+  "product_context": {
+    "game_code": null,
+    "name": "godot-v1-plus",
+    "publisher_code": null,
+    "publisher_name": null,
+    "platforms": [],
+    "categories": [],
+    "tags": [],
+    "icon_url": null,
+    "screenshots": [],
+    "description": "纯 AI 驱动的 Godot 4 2D 游戏脚手架，支持完整首版、同源视觉资产、素材生成、自动 review 和 Web 部署。"
+  },
+  "ai_context": {},
+  "opportunity_context": null,
+  "market_snapshot": {
+    "trend_summary": {},
+    "trend_groups": [],
+    "competitors_top": [],
+    "material_count": 0,
+    "video_count": 0
+  },
+  "materials_refs": [],
+  "video_refs": [],
+  "implementation_hints": {
+    "goal": "在脚手架中从自然语言构建可试玩并可继续扩展的 2D 游戏。",
+    "event_hint": "当前为通用 AI 游戏脚手架，建议先锁定玩法目标、美术方向、完整首版范围、系统边界和同源视觉资产计划。",
+    "recommended_scope": [
+      "先完成首版基础闭环（目标-操作-反馈-结束-重开），并继续补齐内容差异和必要系统。",
+      "完整首版默认做至少 3 个有差异内容单元、挑战或系统阶段。",
+      "中度/混合玩法先写入玩法蓝图、系统关系、数据边界和验收标准。",
+      "概念图只作为风格锚点；HUD、角色、怪物/目标、场景和 VFX 必须生成同源运行时素材包。"
+    ],
+    "risks": [],
+    "acceptance_checks": [
+      "本地可一键启动并进入可交互游戏。",
+      "核心操作在 30 秒到 3 分钟内可完整体验。",
+      "关键配置与任务清单可被 Codex/OpenCode 直接消费。"
+    ]
+  },
+  "binary_assets": {
+    "manifest_file": "references/references-manifest.json",
+    "total": 0,
+    "success_count": 0,
+    "failed_count": 0
+  },
+  "reference_assets": {
+    "manifest_file": "references/references-manifest.json",
+    "total": 0,
+    "success_count": 0,
+    "failed_count": 0
+  }
+}

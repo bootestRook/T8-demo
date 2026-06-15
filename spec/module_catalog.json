@@ -1,0 +1,182 @@
+{
+  "version": 1,
+  "purpose": "AI-readable catalog for choosing optional Godot gameplay modules. Modules are not enabled by default in the empty starter template.",
+  "rules": [
+    "Prefer PrototypeState.gd, scenes/Game.gd, and Hud.gd for first-version gameplay work.",
+    "Use modules only when the ability has a clear single responsibility or repeated use.",
+    "Modules communicate through signals and GameEvents; they must not directly edit HUD or PrototypeState internals.",
+    "Data modules should expose serialize() and deserialize(data) when persistence is needed."
+  ],
+  "modules": [
+    {
+      "id": "input_profile",
+      "name": "InputProfile",
+      "path": "src/game/modules/InputProfile.gd",
+      "layer": "presentation",
+      "responsibility": "Register and read default movement/action inputs.",
+      "when_to_use": "A game needs WASD/arrow keys, primary action, secondary action, or cancel actions.",
+      "public_methods": ["ensure_actions", "get_move_vector", "pressed", "held"],
+      "signals": []
+    },
+    {
+      "id": "player_controller_2d",
+      "name": "PlayerController2D",
+      "path": "src/game/modules/PlayerController2D.gd",
+      "layer": "presentation",
+      "responsibility": "Top-down CharacterBody2D movement controller.",
+      "when_to_use": "A 2D action/survival game needs reusable direct movement.",
+      "public_methods": ["set_input_enabled", "read_move_vector"],
+      "signals": ["moved", "input_enabled_changed"]
+    },
+    {
+      "id": "enemy_ai_2d",
+      "name": "EnemyAI2D",
+      "path": "src/game/modules/EnemyAI2D.gd",
+      "layer": "rules",
+      "responsibility": "Lightweight chase/wander AI without damage or win/loss logic.",
+      "when_to_use": "The first version needs simple moving threats.",
+      "public_methods": ["set_target"],
+      "signals": ["target_changed", "reached_target"]
+    },
+    {
+      "id": "spawner",
+      "name": "Spawner",
+      "path": "src/game/modules/Spawner.gd",
+      "layer": "rules",
+      "responsibility": "Instantiate PackedScene nodes and emit spawn events.",
+      "when_to_use": "Enemies, pickups, obstacles, or props need centralized spawning.",
+      "public_methods": ["spawn"],
+      "signals": ["spawned"],
+      "events": ["spawned"]
+    },
+    {
+      "id": "pickup",
+      "name": "Pickup",
+      "path": "src/game/modules/Pickup.gd",
+      "layer": "rules",
+      "responsibility": "Area2D pickup entry that emits collected payloads.",
+      "when_to_use": "A game has collectible items, score gems, resources, or keys.",
+      "public_methods": ["collect"],
+      "signals": ["collected"],
+      "events": ["pickup_collected"]
+    },
+    {
+      "id": "item_catalog",
+      "name": "ItemCatalog",
+      "path": "src/game/modules/ItemCatalog.gd",
+      "layer": "data",
+      "responsibility": "Store item definitions, stack limits, item types, and equip slots.",
+      "when_to_use": "Inventory, loot, equipment, or quest items need stable definitions.",
+      "persistence": false,
+      "public_methods": ["register_item", "get_item", "has_item", "max_stack", "equip_slot"],
+      "signals": []
+    },
+    {
+      "id": "inventory_store",
+      "name": "InventoryStore",
+      "path": "src/game/modules/InventoryStore.gd",
+      "layer": "data",
+      "responsibility": "Slot inventory with stacking, removal, moving, and persistence.",
+      "when_to_use": "A game needs carried items or backpack pressure.",
+      "public_methods": ["setup", "add_item", "remove_item", "count_item", "move_slot", "serialize", "deserialize"],
+      "signals": ["inventory_changed", "item_added"],
+      "events": ["item_added"]
+    },
+    {
+      "id": "equipment_store",
+      "name": "EquipmentStore",
+      "path": "src/game/modules/EquipmentStore.gd",
+      "layer": "data",
+      "responsibility": "Equipment slots and aggregated stats.",
+      "when_to_use": "Items can be equipped and affect stats.",
+      "public_methods": ["setup", "can_equip", "equip", "unequip", "bonus_totals", "serialize", "deserialize"],
+      "signals": ["equipment_changed"],
+      "events": ["item_equipped"]
+    },
+    {
+      "id": "loot_table",
+      "name": "LootTable",
+      "path": "src/game/modules/LootTable.gd",
+      "layer": "rules",
+      "responsibility": "Weighted loot roll returning item ids and quantities.",
+      "when_to_use": "Enemies, chests, rewards, or extraction loot need random drops.",
+      "public_methods": ["add_entry", "roll"],
+      "signals": []
+    },
+    {
+      "id": "wave_director",
+      "name": "WaveDirector",
+      "path": "src/game/modules/WaveDirector.gd",
+      "layer": "rules",
+      "responsibility": "Timed wave sequence that emits spawn requests.",
+      "when_to_use": "Survival, tower defense, arena, or stage games need wave pacing.",
+      "public_methods": ["configure", "start", "tick"],
+      "signals": ["wave_started", "spawn_requested", "wave_finished", "sequence_finished"],
+      "events": ["wave_started", "wave_spawn_requested"]
+    },
+    {
+      "id": "quest_store",
+      "name": "QuestStore",
+      "path": "src/game/modules/QuestStore.gd",
+      "layer": "data",
+      "responsibility": "Quest definitions, objective progress, completion, and persistence.",
+      "when_to_use": "A game needs task goals, chapters, or objective tracking beyond a single score.",
+      "public_methods": ["register_quest", "start_quest", "add_progress", "serialize", "deserialize"],
+      "signals": ["quest_started", "quest_updated", "quest_completed"],
+      "events": ["quest_updated"]
+    },
+    {
+      "id": "dialogue_runner",
+      "name": "DialogueRunner",
+      "path": "src/game/modules/DialogueRunner.gd",
+      "layer": "presentation",
+      "responsibility": "Advance dialogue lines without binding to a UI skin.",
+      "when_to_use": "A game needs tutorial, story, NPC, or mission text sequences.",
+      "public_methods": ["start", "next_line", "current_line", "is_finished"],
+      "signals": ["line_started", "dialogue_finished"]
+    },
+    {
+      "id": "save_store",
+      "name": "SaveStore",
+      "path": "src/game/modules/SaveStore.gd",
+      "layer": "utility",
+      "responsibility": "Register save providers and write/read JSON save data.",
+      "when_to_use": "Multiple systems need unified persistence.",
+      "public_methods": ["register_provider", "save_game", "load_game"],
+      "signals": ["saved", "loaded"]
+    },
+    {
+      "id": "menu_presenter",
+      "name": "MenuPresenter",
+      "path": "src/game/modules/MenuPresenter.gd",
+      "layer": "presentation",
+      "responsibility": "Programmatic start/pause/result menu that emits menu actions.",
+      "when_to_use": "A game needs simple menus without custom UI art yet.",
+      "public_methods": ["show_menu", "hide_menu"],
+      "signals": ["action_requested"],
+      "events": ["menu_action"]
+    },
+    {
+      "id": "scene_router",
+      "name": "SceneRouter",
+      "path": "src/game/modules/SceneRouter.gd",
+      "layer": "utility",
+      "responsibility": "Central scene changes and reload requests.",
+      "when_to_use": "A game has multiple scenes or needs reliable reload/change failure reporting.",
+      "public_methods": ["change_to", "reload_current"],
+      "signals": ["scene_change_requested", "scene_changed", "scene_change_failed"],
+      "events": ["scene_change_requested"]
+    },
+    {
+      "id": "tutorial_hints",
+      "name": "TutorialHints",
+      "path": "src/game/modules/TutorialHints.gd",
+      "layer": "presentation",
+      "responsibility": "One-shot or repeatable tutorial hint triggers.",
+      "when_to_use": "A game needs contextual prompts for first-time actions.",
+      "public_methods": ["register_hint", "trigger", "reset_hint", "reset_all"],
+      "signals": ["hint_shown"],
+      "events": ["tutorial_hint_shown"]
+    }
+  ]
+}

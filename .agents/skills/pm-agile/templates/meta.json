@@ -1,0 +1,23 @@
+{
+  "demand_id": "",
+  "title": "",
+  "owner": "",
+  "priority": "P1",
+  "created_date": "",
+  "last_updated": "",
+  "demand_status": "planning",
+  "workspace_status": "active",
+  "deps": "",
+  "related_docs": "",
+  "workspace_path": "",
+  "summary": {
+    "current_task": "无",
+    "next_task": "无",
+    "block": "无",
+    "done_criteria": "",
+    "read_first": "无",
+    "products": "无",
+    "manual_step": "否",
+    "followup": "无"
+  }
+}

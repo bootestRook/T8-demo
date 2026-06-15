@@ -1,0 +1,20 @@
+{
+  "handoffs": [
+    {
+      "demand_id": "",
+      "title": "",
+      "owner": "",
+      "handoff_date": "",
+      "handoff_note": "",
+      "workspace_path": "",
+      "session_context": {
+        "current_task": "无",
+        "next_task": "无",
+        "block": "无",
+        "products": "无",
+        "read_first": "无",
+        "key_files": []
+      }
+    }
+  ]
+}

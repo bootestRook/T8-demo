@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "gdscript_toolkit": {
+    "package": "gdtoolkit==4.5.0",
+    "target": "tools/gdtoolkit/python",
+    "commands": ["gdlint", "gdformat"]
+  },
+  "gdunit4": {
+    "version": "v6.1.3",
+    "repository": "godot-gdunit-labs/gdUnit4",
+    "source_zip": "https://codeload.github.com/godot-gdunit-labs/gdUnit4/zip/refs/tags/v6.1.3",
+    "addon_path": "addons/gdUnit4",
+    "test_roots": ["tests/gdunit", "test"]
+  }
+}

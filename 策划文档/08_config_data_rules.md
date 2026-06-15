@@ -1,0 +1,198 @@
+# 配置表与数据驱动规则
+
+## 总原则
+
+```text
+所有可调数值必须进配置表。
+战斗代码只读配置，不写死卡牌、怪物、波次、升级词条。
+```
+
+第一版推荐使用 CSV，便于直接从表格导出。进入 Godot 后由 `ConfigDB` 统一加载成 Dictionary。
+
+---
+
+## 配置文件列表
+
+```text
+configs/cards.csv
+configs/card_effects.csv
+configs/upgrades.csv
+configs/monsters.csv
+configs/waves.csv
+configs/exp_curve.csv
+```
+
+---
+
+## cards.csv
+
+字段：
+
+| 字段 | 说明 |
+|---|---|
+| card_id | 卡牌唯一 ID |
+| name | 卡牌名 |
+| same_name_key | 同名冷却 key |
+| core_skill | `thermobaric` / `dry_ice` / `electro_pierce` |
+| cost | 费用 |
+| icon | 图标资源名 |
+| unlock_level | 可出现等级 |
+| rarity | 品质 |
+| text | UI 文本 |
+| effect_ids | 逗号分隔的效果 ID |
+
+示例：
+
+```csv
+card_id,name,same_name_key,core_skill,cost,icon,unlock_level,rarity,text,effect_ids
+407400002,温压弹连发,温压弹连发,thermobaric,2,icon_keji_wenyadan,1,normal,"额外释放1枚温压弹，伤害-20%",E_THERMO_RELEASE_1_DMG_DOWN
+407400003,热能爆炸,热能爆炸,thermobaric,2,icon_keji_wenyadan,1,normal,"温压弹的爆炸伤害+80%",E_THERMO_EXPLOSION_DMG_80
+```
+
+---
+
+## card_effects.csv
+
+字段：
+
+| 字段 | 说明 |
+|---|---|
+| effect_id | 效果唯一 ID |
+| effect_type | 效果类型 |
+| param_json | 参数 JSON 字符串 |
+
+示例：
+
+```csv
+effect_id,effect_type,param_json
+E_THERMO_RELEASE_1_DMG_DOWN,core_release_modify,"{""release_add"":1,""release_damage_mul"":0.8}"
+E_THERMO_EXPLOSION_DMG_80,thermo_modify,"{""explosion_mul"":1.8}"
+```
+
+---
+
+## upgrades.csv
+
+字段：
+
+| 字段 | 说明 |
+|---|---|
+| upgrade_id | 升级唯一 ID |
+| name | 名称 |
+| upgrade_type | `gun` / `core_base` / `survival` / `energy` / `card_add` / `card_upgrade` |
+| unlock_level | 出现等级 |
+| weight | 权重 |
+| text | UI 文本 |
+| effect_type | 执行类型 |
+| param_json | 参数 |
+
+示例：
+
+```csv
+upgrade_id,name,upgrade_type,unlock_level,weight,text,effect_type,param_json
+U_GUN_EXPLOSION,子弹爆炸,gun,1,100,"子弹命中怪物后爆炸",gun_add_on_hit,"{""effect"":""bullet_explosion""}"
+U_THERMO_PROJECTILE_1,温压弹数量+1,core_base,1,80,"温压弹数量+1",core_skill_modify,"{""skill"":""thermobaric"",""projectile_add"":1}"
+```
+
+---
+
+## monsters.csv
+
+字段：
+
+| 字段 | 说明 |
+|---|---|
+| monster_id | 怪物 ID |
+| name | 名称 |
+| type | `normal` / `fast` / `tank` / `elite` / `boss` |
+| hp | 生命 |
+| move_speed | 移动速度 |
+| attack | 攻击力 |
+| attack_interval | 攻击间隔 |
+| exp | 击杀经验 |
+| freeze_mul | 冻结时长倍率 |
+| paralyze_mul | 麻痹时长倍率 |
+
+---
+
+## waves.csv
+
+字段：
+
+| 字段 | 说明 |
+|---|---|
+| wave_id | 波次 ID |
+| time | 触发时间，单位秒 |
+| monster_id | 怪物 ID |
+| count | 数量 |
+| spawn_pattern | 出生模式 |
+| spawn_interval | 单个怪物出生间隔 |
+| lane_rule | 车道 / 随机规则 |
+| hp_mul | 血量倍率 |
+| speed_mul | 速度倍率 |
+
+示例：
+
+```csv
+wave_id,time,monster_id,count,spawn_pattern,spawn_interval,lane_rule,hp_mul,speed_mul
+W001,0,M_NORMAL,8,line,0.3,random,1.0,1.0
+W_ELITE_001,180,M_ELITE,1,center,0,center,1.0,1.0
+W_BOSS_001,300,M_BOSS,1,center,0,center,1.0,1.0
+```
+
+---
+
+## exp_curve.csv
+
+字段：
+
+| 字段 | 说明 |
+|---|---|
+| level | 当前等级 |
+| exp_to_next | 升到下一级需要经验 |
+| energy_cap | 该等级能量上限 |
+
+示例：
+
+```csv
+level,exp_to_next,energy_cap
+1,10,3
+2,14,3
+3,18,3
+4,22,3
+5,26,5
+```
+
+---
+
+## ConfigDB 加载规则
+
+```gdscript
+func load_all() -> void:
+    cards = load_csv_as_dict("res://configs/cards.csv", "card_id")
+    card_effects = load_csv_as_dict("res://configs/card_effects.csv", "effect_id")
+    upgrades = load_csv_as_dict("res://configs/upgrades.csv", "upgrade_id")
+    monsters = load_csv_as_dict("res://configs/monsters.csv", "monster_id")
+    waves = load_csv_as_array("res://configs/waves.csv")
+    exp_curve = load_csv_as_dict("res://configs/exp_curve.csv", "level")
+
+    waves.sort_custom(func(a, b): return float(a.time) < float(b.time))
+```
+
+---
+
+## 配置校验规则
+
+进入战斗前必须校验：
+
+```text
+1. 所有 card_id 唯一。
+2. 所有 effect_id 存在。
+3. 所有 upgrade_id 唯一。
+4. waves.csv 中 monster_id 均存在。
+5. exp_curve.csv 覆盖 1~20 级。
+6. 0费卡存在但不能配置为纯高伤害。
+7. 所有 core_skill 值在允许枚举内。
+```
+
+如果校验失败，直接阻止进入战斗并打印错误。

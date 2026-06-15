@@ -1,0 +1,7 @@
+{
+  "autoCommit": false,
+  "commitOnSessionIdle": false,
+  "includeUntracked": true,
+  "runBuildBeforeCommit": false,
+  "messagePrefix": "ai"
+}

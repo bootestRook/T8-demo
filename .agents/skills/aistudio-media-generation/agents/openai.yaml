@@ -1,0 +1,4 @@
+interface:
+  display_name: "Media Generation"
+  short_description: "Generate images and videos through configurable server media APIs"
+  default_prompt: "Use $media-generation when the user wants to generate images or videos by calling a configured server media API with runtime authentication. Prefer `tencent-nano-banana2` for image generation and `seedance-video-2-0` for video generation when the provider is unspecified and available. Prefer `--output downloads` so generated media is saved into the current working directory and returned as local file paths plus source URLs."

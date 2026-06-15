@@ -1,0 +1,16 @@
+{
+  "demands": [
+    {
+      "demand_id": "",
+      "title": "",
+      "owner": "",
+      "priority": "",
+      "status": "",
+      "deps": "",
+      "related_docs": "",
+      "workspace_path": "",
+      "archive_date": "",
+      "remark": ""
+    }
+  ]
+}

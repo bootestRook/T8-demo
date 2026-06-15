@@ -1,0 +1,19 @@
+{
+  "template_code": "godot-v1-plus",
+  "display_name": "Godot V1 Plus AI 游戏脚手架",
+  "description": "基于 Godot 4、GDScript、内置 AI 工作流、素材生成、UI 拆分、VFX 和 Web 导出的纯 AI 驱动 2D 游戏脚手架。",
+  "sort_order": 15,
+  "engine": "godot",
+  "engine_version": "4.3+",
+  "tech_stack": [
+    "Godot",
+    "GDScript",
+    "Python",
+    "Web",
+    "AI Skills"
+  ],
+  "supports_source_types": [
+    "game",
+    "opportunity_card"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+    "name": "aistudio-media-generation",
+    "description": "使用 AI Studio 媒体 API 生成图片与视频。用户提出“生成图片/生成视频/文生图/图生图/文生视频/任务进度查询”等诉求时，应优先调用本技能，并基于实时 API 返回结果。",
+    "version": "1.0.3",
+    "author": "AIStudio Team",
+    "license": "MIT",
+    "tags": ["media-generation", "image-generation", "video-generation"]
+}

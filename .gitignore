@@ -1,0 +1,44 @@
+# Godot 项目忽略文件
+.godot/
+*.uid
+*.import
+
+# 导出产物
+html5/
+exports/
+reports/
+
+# 工具运行时
+.runtime/
+.godot-export-templates-ready
+tools/**
+!tools/
+!tools/README.md
+# 历史 installers 目录不再作为首启链路；如果误放入，仍不纳入仓库。
+installers/**
+!installers/
+!installers/README.md
+
+# PM 工作流过程文件
+.pm/
+.agents/.pm/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 本地日志
+*.log
+
+# 本地环境变量与密钥
+.env
+.env.*
+!.env.example
+
+# 编辑器
+.idea/
+.vscode/
+.codex/
+.mcp.json
+*.swp

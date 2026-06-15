@@ -1,0 +1,260 @@
+{
+  "schema_version": "v1",
+  "experience_floor": {
+    "default": {
+      "min_content_units": 3,
+      "requires_unit_differences": true,
+      "requires_stage_change": true,
+      "requires_settlement": true,
+      "requires_progress": true,
+      "requires_decision_pressure": true
+    },
+    "starter_template": {
+      "skip_small_complete_review": true
+    },
+    "dynamic_keywords": ["动作", "射击", "生存", "敌人", "怪物", "平台", "跳跃", "跑酷", "搜打撤", "撤离", "塔防", "弹幕", "ARPG", "战斗"],
+    "dynamic_blueprints": ["roguelite", "extraction", "tower_defense", "loot_arpg", "parkour", "level_design"],
+    "genre_requirements": {
+      "extraction": ["搜集", "撤离", "死亡损失", "高价值", "风险"],
+      "tower_defense": ["路线", "波次", "基地", "敌人"],
+      "loot_arpg": ["战斗", "掉落", "装备", "成长"],
+      "parkour": ["障碍", "距离", "失败", "节奏"],
+      "inventory_backpack": ["物品", "格子", "容量", "组合"]
+    }
+  },
+  "default_blueprints": ["common_loop"],
+  "blueprints": [
+    {
+      "id": "common_loop",
+      "name": "通用可玩闭环",
+      "aliases": ["通用闭环", "核心闭环", "基础闭环"],
+      "concept_required": ["概念ID", "一句话目标", "玩法不变量", "禁止污染项", "验收标准"],
+      "code_checks": [
+        {
+          "name": "开始入口",
+          "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
+          "any": ["start_round", "_start"]
+        },
+        {
+          "name": "成功条件",
+          "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
+          "any": ["Phase.SUCCESS", "_end_round(Phase.SUCCESS"]
+        },
+        {
+          "name": "失败条件",
+          "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
+          "any": ["Phase.FAILURE", "fail("]
+        },
+        {
+          "name": "重开路径",
+          "files": ["scenes/Game.gd", "src/ui/Hud.gd"],
+          "any": ["_restart", "request_round_restart", "再来", "重开"]
+        },
+        {
+          "name": "输入覆盖",
+          "files": ["scenes/Game.gd", "src/game/Player.gd"],
+          "any": ["KEY_LEFT", "KEY_RIGHT", "ui_left", "ui_right"],
+          "also_any": ["KEY_A", "KEY_D", "KEY_W", "KEY_S"]
+        }
+      ]
+    },
+    {
+      "id": "starter_template",
+      "name": "空脚手架",
+      "aliases": ["starter-template", "空脚手架", "无内置游戏"],
+      "concept_required": ["starter-template", "无内置游戏", "init"],
+      "code_checks": [
+        {
+          "name": "中性状态",
+          "files": ["src/game/PrototypeState.gd", "src/ui/Hud.gd", "scenes/Game.gd"],
+          "any": ["STARTER_CONCEPT_ID", "无内置游戏", "starter_shell"]
+        },
+        {
+          "name": "无玩法启动入口",
+          "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
+          "any": ["Phase.STARTER", "status_text"]
+        }
+      ]
+    },
+    {
+      "id": "roguelite",
+      "name": "肉鸽/局外成长",
+      "aliases": ["肉鸽", "Roguelite", "Roguelike", "随机流派", "局外成长"],
+      "concept_required": ["随机", "构筑", "一局结束", "局外"],
+      "recommended_modules": ["RunState", "RewardDraft", "MetaProgress", "ContentUnits"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["RunState", "RewardDraft", "MetaProgress", "ContentUnits"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "extraction",
+      "name": "搜打撤",
+      "aliases": ["搜打撤", "Extraction", "撤离", "带出", "风险收益"],
+      "concept_required": ["搜集", "撤离", "带出", "死亡损失"],
+      "recommended_modules": ["RaidState", "ExtractionZones", "Inventory", "RiskReward"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["RaidState", "ExtractionZones", "Inventory", "RiskReward"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "tower_defense",
+      "name": "塔防",
+      "aliases": ["塔防", "防守波次", "TD", "路线防守"],
+      "concept_required": ["路线", "波次", "防御塔", "基地生命"],
+      "recommended_modules": ["WaveDirector", "TowerCatalog", "EnemyPath", "BaseHealth"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["WaveDirector", "TowerCatalog", "EnemyPath", "BaseHealth"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "sim_management",
+      "name": "模拟经营",
+      "aliases": ["模拟经营", "经营", "生产链", "资源管理", "放置经营"],
+      "concept_required": ["资源", "生产", "消耗", "目标"],
+      "recommended_modules": ["ResourceLedger", "ProductionRules", "TaskQueue", "UpgradeCatalog"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["ResourceLedger", "ProductionRules", "TaskQueue", "UpgradeCatalog"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "rts",
+      "name": "RTS",
+      "aliases": ["RTS", "即时战略", "框选", "单位指挥", "建造"],
+      "concept_required": ["单位", "指挥", "资源", "敌方目标"],
+      "recommended_modules": ["UnitSelection", "CommandQueue", "ResourceLedger", "SimpleAI"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["UnitSelection", "CommandQueue", "ResourceLedger", "SimpleAI"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "auto_chess",
+      "name": "自走棋",
+      "aliases": ["自走棋", "Auto Chess", "棋子羁绊", "自动战斗"],
+      "concept_required": ["棋子", "商店", "站位", "自动战斗"],
+      "recommended_modules": ["ShopRoll", "BenchBoard", "SynergyRules", "AutoBattle"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["ShopRoll", "BenchBoard", "SynergyRules", "AutoBattle"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "cultivation",
+      "name": "养成/修炼",
+      "aliases": ["养成", "修炼", "培养", "角色成长", "突破"],
+      "concept_required": ["属性", "成长", "阶段", "目标"],
+      "recommended_modules": ["StatBlock", "GrowthRules", "Milestones", "ProgressStore"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["StatBlock", "GrowthRules", "Milestones", "ProgressStore"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "inventory_backpack",
+      "name": "背包/格子构筑",
+      "aliases": ["背包", "格子", "背包乱斗", "物品组合", "Inventory"],
+      "concept_required": ["物品", "格子", "组合", "容量"],
+      "recommended_modules": ["InventoryGrid", "ItemCatalog", "ItemSynergy", "DragDrop"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["InventoryGrid", "ItemCatalog", "ItemSynergy", "DragDrop"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "loot_arpg",
+      "name": "暗黑/刷装",
+      "aliases": ["暗黑", "刷装", "ARPG", "词条", "掉落"],
+      "concept_required": ["掉落", "词条", "战斗", "成长"],
+      "recommended_modules": ["LootTable", "AffixRoller", "CombatStats", "EquipmentSlots"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["LootTable", "AffixRoller", "CombatStats", "EquipmentSlots"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "parkour",
+      "name": "跑酷",
+      "aliases": ["跑酷", "Runner", "无尽跑酷", "障碍"],
+      "concept_required": ["移动", "障碍", "距离", "失败"],
+      "recommended_modules": ["LaneMotion", "ObstacleSpawner", "DistanceScore", "FailZones"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["LaneMotion", "ObstacleSpawner", "DistanceScore", "FailZones"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "level_design",
+      "name": "LD/关卡设计",
+      "aliases": ["LD", "关卡设计", "关卡", "地图", "地牢房间"],
+      "concept_required": ["关卡目标", "空间", "节奏", "检查点"],
+      "recommended_modules": ["LevelPattern", "RoomGraph", "EncounterBudget", "Checkpoint"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["LevelPattern", "RoomGraph", "EncounterBudget", "Checkpoint"],
+          "min_matches": 2
+        }
+      ]
+    },
+    {
+      "id": "hybrid",
+      "name": "多玩法融合",
+      "aliases": ["融合", "混合玩法", "多玩法", "玩法融合"],
+      "concept_required": ["主循环", "副系统", "优先级", "首版裁剪"],
+      "recommended_modules": ["CoreLoopContract", "SystemBridge", "ScopeCut", "ReviewMatrix"],
+      "implementation_evidence": [
+        {
+          "name": "核心系统落地",
+          "files": ["src/game", "scenes", "src/ui"],
+          "any": ["CoreLoopContract", "SystemBridge", "ScopeCut", "ReviewMatrix"],
+          "min_matches": 2
+        }
+      ]
+    }
+  ]
+}

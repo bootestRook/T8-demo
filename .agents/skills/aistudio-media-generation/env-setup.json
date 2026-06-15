@@ -1,0 +1,25 @@
+{
+    "env_vars": [
+        {
+            "key": "MEDIA_API_KEY",
+            "api": {
+                "url": "http://ai-studio.dodjoy.com:3001/api/api-keys",
+                "method": "POST",
+                "body": {
+                    "name": "opencodehub-media"
+                },
+                "response_key": "key"
+            }
+        },
+        {
+            "key": "X_DODJOY_TOKEN",
+            "login": {
+                "url": "http://auth.dodjoy.com/login?accessKey=1",
+                "response_key": "key",
+                "header": "X-DODJOY-TOKEN",
+                "windows_user_env_key": "X-DODJOY-TOKEN",
+                "linux_shell_env_key": "X_DODJOY_TOKEN"
+            }
+        }
+    ]
+}
