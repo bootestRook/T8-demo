@@ -1,454 +1,704 @@
 extends CanvasLayer
 
-const CARD_MIN_HEIGHT := 205.0
-const UPGRADE_CARD_WIDTH := 260.0
-const UPGRADE_CARD_HEIGHT := 360.0
+const MESSAGE_WIDTH_RATIO := 0.86
+const COMPACT_WIDTH := 340.0
+const HAND_CARD_SIZE := Vector2(150.0, 255.0)
+const HAND_CARD_SAFE_SIDE := 82.0
+const HAND_CARD_TOP := 122.0
+const HAND_CARD_EDGE_DROP := 24.0
+const HAND_CARD_MAX_ROTATION := 0.19
+const HAND_CARD_MIN_ROTATION := 0.045
+const HAND_CARD_BASE_SCALE := 1.15
+const HAND_CARD_DENSE_SCALE := 0.96
+const HAND_CARD_OVERFLOW_SCALE := 0.86
+const DEFAULT_STAGE := "5-1 教堂广场"
+const DEFAULT_CARDS := [
+	{
+		"cost": 1,
+		"name": "冰霜弹",
+		"type": "攻击",
+		"desc": "造成伤害并冻结。",
+		"art": "?",
+	},
+	{
+		"cost": 2,
+		"name": "穿透弹",
+		"type": "攻击",
+		"desc": "对直线敌人穿透。",
+		"art": "?",
+	},
+	{
+		"cost": 1,
+		"name": "维修机",
+		"type": "技能",
+		"desc": "修复城墙耐久。",
+		"art": "+",
+	},
+	{
+		"cost": 3,
+		"name": "落雷",
+		"type": "范围",
+		"desc": "指定区域高频伤害。",
+		"art": "?",
+	},
+	{
+		"cost": 2,
+		"name": "防线护盾",
+		"type": "防御",
+		"desc": "生成临时护盾。",
+		"art": "?",
+	},
+]
 
 @onready var root: Control = $Root
 @onready var safe_margin: MarginContainer = $Root/SafeMargin
 @onready var top_bar: GridContainer = %TopBar
-@onready var message_panel: PanelContainer = %MessagePanel
-@onready var message_margin: MarginContainer = %MessageMargin
+@onready var pause_button: Button = %PauseButton
+@onready var time_label: Label = %TimeLabel
+@onready var stage_label: Label = %StageLabel
+@onready var wave_label: Label = %WaveLabel
+@onready var level_title_label: Label = %LevelTitleLabel
+@onready var level_value_label: Label = %LevelValueLabel
+@onready var exp_value_label: Label = %ExpValueLabel
+@onready var exp_bar: ProgressBar = %ExpBar
+@onready var objective_panel: PanelContainer = %ObjectivePanel
 @onready var objective_label: Label = %ObjectiveLabel
 @onready var status_label: Label = %StatusLabel
+@onready var targeting_hint_label: Label = %TargetingHintLabel
+@onready var ammo_value_label: Label = %AmmoValueLabel
+@onready var wall_hp_bar: ProgressBar = %WallHpBar
+@onready var wall_hp_icon_label: Label = %WallHpIconLabel
+@onready var wall_hp_value_label: Label = %WallHpValueLabel
+@onready var energy_value_label: Label = %EnergyValueLabel
+@onready var hero_name_label: Label = %HeroNameLabel
+@onready var ultimate_cost_label: Label = %UltimateCostLabel
+@onready var ultimate_bar: ProgressBar = %UltimateBar
 @onready var hint_label: Label = %HintLabel
-@onready var message_label: Label = %MessageLabel
-@onready var bottom_hint_label: Label = %BottomHintLabel
+@onready var discard_pile_button: Button = %DiscardPileButton
+@onready var draw_pile_button: Button = %DrawPileButton
+@onready var bottom_toast_label: Label = %BottomToastLabel
+@onready var hand_layer: Control = $Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer
+@onready var pause_overlay: Control = %PauseOverlay
+@onready var pause_panel: PanelContainer = %PausePanel
+@onready var pause_title_label: Label = %PauseTitleLabel
+@onready var pause_summary_label: Label = %PauseSummaryLabel
+@onready var continue_button: Button = %ContinueButton
+@onready var restart_button: Button = %RestartButton
+@onready var card_widgets := [
+	{
+		"panel": %Card1,
+		"cost": %Card1CostLabel,
+		"art": %Card1ArtLabel,
+		"name": %Card1NameLabel,
+		"type": %Card1TypeLabel,
+		"desc": %Card1DescLabel,
+		"school": %Card1SchoolIconLabel,
+	},
+	{
+		"panel": %Card2,
+		"cost": %Card2CostLabel,
+		"art": %Card2ArtLabel,
+		"name": %Card2NameLabel,
+		"type": %Card2TypeLabel,
+		"desc": %Card2DescLabel,
+		"school": %Card2SchoolIconLabel,
+	},
+	{
+		"panel": %Card3,
+		"cost": %Card3CostLabel,
+		"art": %Card3ArtLabel,
+		"name": %Card3NameLabel,
+		"type": %Card3TypeLabel,
+		"desc": %Card3DescLabel,
+		"school": %Card3SchoolIconLabel,
+	},
+	{
+		"panel": %Card4,
+		"cost": %Card4CostLabel,
+		"art": %Card4ArtLabel,
+		"name": %Card4NameLabel,
+		"type": %Card4TypeLabel,
+		"desc": %Card4DescLabel,
+		"school": %Card4SchoolIconLabel,
+	},
+	{
+		"panel": %Card5,
+		"cost": %Card5CostLabel,
+		"art": %Card5ArtLabel,
+		"name": %Card5NameLabel,
+		"type": %Card5TypeLabel,
+		"desc": %Card5DescLabel,
+		"school": %Card5SchoolIconLabel,
+	},
+]
 
 var _snapshot: Dictionary = {}
-var _top_hud: VBoxContainer
-var _wall_bar: ProgressBar
-var _energy_bar: ProgressBar
-var _exp_bar: ProgressBar
-var _resource_label: Label
-var _deck_label: Label
-var _discard_label: Label
-var _hand_panel: PanelContainer
-var _hand_row: HBoxContainer
-var _discard_button: Button
-var _upgrade_overlay: ColorRect
-var _upgrade_row: HBoxContainer
-var _restart_button: Button
-var _hand_signature := ""
-var _upgrade_signature := ""
+var _layout_width := 0.0
+var _gameplay_mode := true
 
 
 func _ready() -> void:
-	_hide_template_nodes()
-	_build_top_hud()
-	_build_hand_area()
-	_build_upgrade_overlay()
-	_build_restart_button()
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pause_button.pressed.connect(_on_pause_pressed)
+	continue_button.pressed.connect(_close_pause_overlay)
+	restart_button.pressed.connect(_on_restart_pressed)
+	discard_pile_button.pressed.connect(_on_discard_pile_pressed)
+	draw_pile_button.pressed.connect(_on_draw_pile_pressed)
 	get_viewport().size_changed.connect(_apply_responsive_layout)
-	PrototypeState.status_changed.connect(_on_status_changed)
-	_apply_responsive_layout.call_deferred()
+	_apply_styles()
+	_apply_responsive_layout()
+	if not PrototypeState.state_changed.is_connected(set_battle_snapshot):
+		PrototypeState.state_changed.connect(set_battle_snapshot)
+	set_battle_snapshot(PrototypeState.get_snapshot())
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event.is_action_pressed("ui_cancel"):
+		return
+	if pause_overlay.visible:
+		_close_pause_overlay()
+	else:
+		_open_pause_overlay()
+	get_viewport().set_input_as_handled()
 
 
 func set_battle_snapshot(snapshot: Dictionary) -> void:
 	_snapshot = snapshot
-	_refresh_top_hud()
-	_refresh_hand_area()
-	_refresh_upgrade_overlay()
-	_refresh_restart()
-	_apply_responsive_layout()
+	var elapsed: float = float(snapshot.get("elapsed_time", 21.0))
+	var wave_current: int = int(snapshot.get("wave_current", 1))
+	var wave_total: int = int(snapshot.get("wave_total", 20))
+	var level: int = int(snapshot.get("level", 1))
+	var exp: int = int(snapshot.get("exp", 60))
+	var exp_max: int = maxi(1, int(snapshot.get("exp_max", 60)))
+	var wall_hp: int = int(snapshot.get("wall_hp", snapshot.get("hp", 3000)))
+	var wall_hp_max: int = maxi(1, int(snapshot.get("wall_hp_max", 3000)))
+	var energy: int = int(snapshot.get("energy", 3))
+	var energy_max: int = maxi(1, int(snapshot.get("energy_max", 3)))
+	var ammo: int = int(snapshot.get("ammo", 75))
+	var ammo_max: int = maxi(1, int(snapshot.get("ammo_max", 75)))
+
+	time_label.text = _format_time(elapsed)
+	stage_label.text = _fit_text(String(snapshot.get("stage_name", DEFAULT_STAGE)), 18)
+	wave_label.text = "波次: %d/%d" % [wave_current, wave_total]
+	level_value_label.text = "%d级" % level
+	exp_value_label.text = "%d/%d" % [exp, exp_max]
+	_set_progress(exp_bar, exp, exp_max)
+	objective_label.text = _clean_label_prefix(_fit_text(String(snapshot.get("objective", "守住城墙")), 30))
+	objective_panel.visible = false
+	status_label.text = ""
+	targeting_hint_label.text = _fit_text(String(snapshot.get("targeting_hint", "推荐落点")), 16)
+	ammo_value_label.text = "%d/%d" % [ammo, ammo_max]
+	wall_hp_value_label.text = "%d" % wall_hp
+	_set_progress(wall_hp_bar, wall_hp, wall_hp_max)
+	energy_value_label.text = "%d/%d" % [energy, energy_max]
+	hero_name_label.text = _fit_text(String(snapshot.get("hero_name", "艾琳")), 14)
+	ultimate_cost_label.text = str(energy)
+	_set_progress(ultimate_bar, energy, 10.0)
+	hint_label.text = ""
+	_update_cards(snapshot, energy)
+	_update_piles(snapshot)
+	_apply_gameplay_mode()
 
 
-func set_gameplay_mode(_enabled: bool) -> void:
-	_apply_responsive_layout()
+func set_gameplay_mode(enabled: bool) -> void:
+	_gameplay_mode = enabled
+	_apply_gameplay_mode()
 
 
-func set_hud_text(_objective: String, _status: String, _hint: String, _message: String = "", _bottom: String = "") -> void:
-	_refresh_top_hud()
+func _apply_styles() -> void:
+	var metal_panel := Color(0.115, 0.105, 0.085, 0.94)
+	var metal_border := Color(0.545, 0.440, 0.250, 0.86)
+	var blue_text := Color(0.82, 0.93, 1.0)
+	var warm_text := Color(1.0, 0.88, 0.58)
+	var plain_text := Color(0.92, 0.90, 0.84)
 
+	for panel in [
+		%ObjectivePanel,
+		%AmmoPanel,
+		%DefenseWallPanel,
+		%WallHpPanel,
+		%HeroStatusPanel,
+		%EnergyBadge,
+		%HeroPortraitPanel,
+		%UltimateCostBadge,
+		%HandArea,
+		pause_panel,
+	]:
+		(panel as PanelContainer).add_theme_stylebox_override("panel", _panel_style(metal_panel, metal_border, 8))
 
-func _hide_template_nodes() -> void:
-	message_panel.visible = false
-	objective_label.visible = false
-	status_label.visible = false
-	hint_label.visible = false
-	bottom_hint_label.visible = false
+	for panel in [%TimePanel, %StagePanel, %WavePanel]:
+		(panel as PanelContainer).add_theme_stylebox_override("panel", _plain_panel_style(Color(0.0, 0.0, 0.0, 0.16), 0))
+	%ExpPanel.add_theme_stylebox_override("panel", _plain_panel_style(Color(0.0, 0.0, 0.0, 0.22), 0))
+	%AmmoPanel.add_theme_stylebox_override(
+		"panel", _compact_panel_style(Color(0.055, 0.075, 0.080, 0.92), Color(0.74, 0.46, 0.20, 0.92), 3, 1)
+	)
+	%DefenseWallPanel.add_theme_stylebox_override("panel", _plain_panel_style(Color(0.0, 0.0, 0.0, 0.0), 0))
+	%WallHpPanel.add_theme_stylebox_override("panel", _plain_panel_style(Color(0.04, 0.04, 0.035, 0.36), 0))
+	%HeroStatusPanel.add_theme_stylebox_override("panel", _plain_panel_style(Color(0.0, 0.0, 0.0, 0.0), 0))
+	%HandArea.add_theme_stylebox_override("panel", _plain_panel_style(Color(0.035, 0.032, 0.026, 0.82), 4))
+	%EnergyBadge.add_theme_stylebox_override("panel", _panel_style(Color(0.050, 0.075, 0.090, 0.96), Color(0.36, 0.66, 0.92, 0.88), 32))
+	%UltimateCostBadge.add_theme_stylebox_override(
+		"panel", _panel_style(Color(0.72, 0.08, 0.70, 0.98), Color(0.06, 0.03, 0.12, 0.98), 30, 3)
+	)
+	%HeroPortraitPanel.add_theme_stylebox_override("panel", _plain_panel_style(Color(0.0, 0.0, 0.0, 0.0), 0))
 
+	for label in _all_labels():
+		label.add_theme_color_override("font_color", plain_text)
+		label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.70))
+		label.add_theme_constant_override("shadow_offset_x", 2)
+		label.add_theme_constant_override("shadow_offset_y", 2)
+		label.add_theme_font_size_override("font_size", 23)
 
-func _build_top_hud() -> void:
-	_top_hud = VBoxContainer.new()
-	_top_hud.name = "BattleTopHud"
-	_top_hud.anchor_left = 0.0
-	_top_hud.anchor_top = 0.0
-	_top_hud.anchor_right = 1.0
-	_top_hud.anchor_bottom = 0.0
-	_top_hud.offset_left = 16.0
-	_top_hud.offset_top = 12.0
-	_top_hud.offset_right = -16.0
-	_top_hud.offset_bottom = 176.0
-	_top_hud.add_theme_constant_override("separation", 8)
-	root.add_child(_top_hud)
+	for label in [stage_label, pause_title_label, energy_value_label]:
+		label.add_theme_color_override("font_color", warm_text)
+		label.add_theme_font_size_override("font_size", 34)
 
-	_resource_label = _make_label(20, Color(0.92, 0.98, 1.0), HORIZONTAL_ALIGNMENT_CENTER)
-	_top_hud.add_child(_resource_label)
+	for label in [time_label, stage_label, wave_label, level_value_label]:
+		label.add_theme_color_override("font_color", Color(0.98, 0.96, 0.88))
+		label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.95))
+		label.add_theme_constant_override("shadow_offset_x", 3)
+		label.add_theme_constant_override("shadow_offset_y", 3)
+	time_label.add_theme_font_size_override("font_size", 25)
+	stage_label.add_theme_font_size_override("font_size", 34)
+	wave_label.add_theme_font_size_override("font_size", 25)
+	level_title_label.add_theme_font_size_override("font_size", 22)
+	level_value_label.add_theme_font_size_override("font_size", 20)
+	exp_value_label.add_theme_font_size_override("font_size", 22)
+	ammo_value_label.add_theme_font_size_override("font_size", 28)
+	ammo_value_label.add_theme_color_override("font_color", Color(0.96, 0.92, 0.82))
+	hero_name_label.add_theme_font_size_override("font_size", 29)
+	ultimate_cost_label.add_theme_font_size_override("font_size", 32)
+	ultimate_cost_label.add_theme_color_override("font_color", Color(0.98, 0.92, 1.0))
+	hint_label.add_theme_font_size_override("font_size", 20)
+	status_label.add_theme_font_size_override("font_size", 19)
+	targeting_hint_label.add_theme_color_override("font_color", Color(0.78, 0.92, 1.0, 0.72))
+	targeting_hint_label.add_theme_font_size_override("font_size", 20)
+	bottom_toast_label.add_theme_font_size_override("font_size", 18)
+	bottom_toast_label.add_theme_color_override("font_color", Color(0.78, 0.88, 0.96))
+	energy_value_label.add_theme_color_override("font_color", Color(0.42, 0.84, 1.0))
+	wall_hp_icon_label.add_theme_color_override("font_color", Color(0.20, 0.95, 0.32))
+	wall_hp_icon_label.add_theme_font_size_override("font_size", 26)
+	objective_label.add_theme_color_override("font_color", blue_text)
 
-	_exp_bar = _make_bar(Color(0.92, 0.62, 1.0), "经验")
-	_top_hud.add_child(_exp_bar)
-
-	var pile_row := HBoxContainer.new()
-	pile_row.add_theme_constant_override("separation", 10)
-	_top_hud.add_child(pile_row)
-	_deck_label = _make_pile_badge("牌库 0")
-	_discard_label = _make_pile_badge("弃牌 0")
-	pile_row.add_child(_deck_label)
-	pile_row.add_child(_discard_label)
-
-
-func _build_hand_area() -> void:
-	_hand_panel = PanelContainer.new()
-	_hand_panel.name = "CardHandPanel"
-	_hand_panel.anchor_left = 0.0
-	_hand_panel.anchor_top = 1.0
-	_hand_panel.anchor_right = 1.0
-	_hand_panel.anchor_bottom = 1.0
-	_hand_panel.offset_left = 12.0
-	_hand_panel.offset_right = -12.0
-	_hand_panel.offset_top = -365.0
-	_hand_panel.offset_bottom = -12.0
-	_hand_panel.add_theme_stylebox_override("panel", _panel_style(Color(0.045, 0.058, 0.076, 0.92), Color(0.34, 0.58, 0.70, 0.76), 18))
-	root.add_child(_hand_panel)
-
-	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 12)
-	margin.add_theme_constant_override("margin_right", 12)
-	margin.add_theme_constant_override("margin_top", 12)
-	margin.add_theme_constant_override("margin_bottom", 12)
-	_hand_panel.add_child(margin)
-
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 8)
-	margin.add_child(layout)
-
-	_wall_bar = _make_bar(Color(0.22, 0.92, 0.48), "城墙 HP")
-	_energy_bar = _make_bar(Color(0.28, 0.66, 1.0), "人物能量")
-	layout.add_child(_wall_bar)
-	layout.add_child(_energy_bar)
-
-	var title_row := HBoxContainer.new()
-	layout.add_child(title_row)
-	var title := _make_label(18, Color(0.86, 0.95, 0.98), HORIZONTAL_ALIGNMENT_LEFT)
-	title.text = "手牌区"
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_row.add_child(title)
-	_discard_button = Button.new()
-	_discard_button.custom_minimum_size = Vector2(132.0, 48.0)
-	_discard_button.pressed.connect(func(): PrototypeState.discard_hand())
-	_style_button(_discard_button, Color(0.18, 0.25, 0.31), 16)
-	title_row.add_child(_discard_button)
-
-	_hand_row = HBoxContainer.new()
-	_hand_row.add_theme_constant_override("separation", 10)
-	layout.add_child(_hand_row)
-
-
-func _build_upgrade_overlay() -> void:
-	_upgrade_overlay = ColorRect.new()
-	_upgrade_overlay.name = "UpgradeChoiceOverlay"
-	_upgrade_overlay.anchor_right = 1.0
-	_upgrade_overlay.anchor_bottom = 1.0
-	_upgrade_overlay.color = Color(0.0, 0.0, 0.0, 0.62)
-	_upgrade_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	root.add_child(_upgrade_overlay)
-
-	var center := CenterContainer.new()
-	center.anchor_right = 1.0
-	center.anchor_bottom = 1.0
-	_upgrade_overlay.add_child(center)
-
-	var layout := VBoxContainer.new()
-	layout.add_theme_constant_override("separation", 22)
-	center.add_child(layout)
-
-	var title := _make_label(32, Color(1.0, 0.92, 0.55), HORIZONTAL_ALIGNMENT_CENTER)
-	title.text = "升级三选一"
-	layout.add_child(title)
-
-	_upgrade_row = HBoxContainer.new()
-	_upgrade_row.add_theme_constant_override("separation", 18)
-	layout.add_child(_upgrade_row)
-	_upgrade_overlay.visible = false
-
-
-func _build_restart_button() -> void:
-	_restart_button = Button.new()
-	_restart_button.anchor_left = 0.5
-	_restart_button.anchor_top = 0.5
-	_restart_button.anchor_right = 0.5
-	_restart_button.anchor_bottom = 0.5
-	_restart_button.offset_left = -120.0
-	_restart_button.offset_top = 110.0
-	_restart_button.offset_right = 120.0
-	_restart_button.offset_bottom = 176.0
-	_restart_button.text = "重新开始"
-	_restart_button.pressed.connect(func(): PrototypeState.reset())
-	_style_button(_restart_button, Color(0.34, 0.16, 0.12), 22)
-	root.add_child(_restart_button)
-	_restart_button.visible = false
-
-
-func _refresh_top_hud() -> void:
-	var time_left := int(_snapshot.get("remaining_time", 0.0))
-	var compact := _get_display_width() <= 700.0
-	if compact:
-		_resource_label.text = (
-			"防线 %02d:%02d  Lv.%d  %dx  K%d"
-			% [
-				time_left / 60,
-				time_left % 60,
-				int(_snapshot.get("level", 1)),
-				int(_snapshot.get("chain", 1)),
-				int(_snapshot.get("kills", 0))
-			]
-		)
-	else:
-		_resource_label.text = (
-			"守住防线  %02d:%02d    Lv.%d    连锁 %dx    击杀 %d"
-			% [
-				time_left / 60,
-				time_left % 60,
-				int(_snapshot.get("level", 1)),
-				int(_snapshot.get("chain", 1)),
-				int(_snapshot.get("kills", 0)),
-			]
-		)
-	_set_bar(_wall_bar, float(_snapshot.get("wall_hp", 0.0)), float(_snapshot.get("wall_max_hp", 1000.0)), "城墙")
-	_set_bar(_energy_bar, float(_snapshot.get("energy", 0.0)), float(_snapshot.get("max_energy", 3)), "主角能量")
-	_set_bar(_exp_bar, float(_snapshot.get("exp", 0.0)), float(_snapshot.get("exp_to_next", 10.0)), "经验")
-	_deck_label.text = "牌库 %d" % int(_snapshot.get("deck_count", 0))
-	_discard_label.text = "弃牌堆 %d" % int(_snapshot.get("discard_count", 0))
-
-
-func _refresh_hand_area() -> void:
-	var phase := int(_snapshot.get("phase", PrototypeState.Phase.PLAYING))
-	var hand: Array = _snapshot.get("hand", [])
-	var signature := _cards_signature(hand)
-	if signature != _hand_signature:
-		_hand_signature = signature
-		for child in _hand_row.get_children():
-			child.queue_free()
-		for i in hand.size():
-			var card: Dictionary = hand[i]
-			var button := _make_hand_card_button(card, i)
-			_hand_row.add_child(button)
-	for i in mini(hand.size(), _hand_row.get_child_count()):
-		var card: Dictionary = hand[i]
-		var button := _hand_row.get_child(i) as Button
-		button.disabled = phase != PrototypeState.Phase.PLAYING or float(_snapshot.get("energy", 0.0)) + 0.001 < float(card.get("cost", 0))
-	var discard_cd := float(_snapshot.get("discard_cd", 0.0))
-	_discard_button.disabled = phase != PrototypeState.Phase.PLAYING or discard_cd > 0.0
-	_discard_button.text = "弃牌 %.0fs" % discard_cd if discard_cd > 0.0 else "弃牌重抽"
-	_hand_panel.visible = phase == PrototypeState.Phase.PLAYING
-
-
-func _refresh_upgrade_overlay() -> void:
-	var phase := int(_snapshot.get("phase", PrototypeState.Phase.PLAYING))
-	_upgrade_overlay.visible = phase == PrototypeState.Phase.UPGRADE
-	if not _upgrade_overlay.visible:
-		_upgrade_signature = ""
-		return
-	var choices: Array = _snapshot.get("upgrade_choices", [])
-	var signature := _cards_signature(choices)
-	if signature == _upgrade_signature:
-		return
-	_upgrade_signature = signature
-	for child in _upgrade_row.get_children():
-		child.queue_free()
-	for i in choices.size():
-		var upgrade: Dictionary = choices[i]
-		var card := Button.new()
-		card.custom_minimum_size = Vector2(UPGRADE_CARD_WIDTH, UPGRADE_CARD_HEIGHT)
-		card.text = "%s\n\n%s\n\n点击选择" % [String(upgrade.get("name", "强化")), String(upgrade.get("text", ""))]
-		card.pressed.connect(func(index := i): PrototypeState.choose_upgrade(index))
-		_style_button(card, Color(0.20, 0.16, 0.42), 22)
-		_upgrade_row.add_child(card)
-	if _upgrade_row.get_child_count() > 0:
-		(_upgrade_row.get_child(0) as Button).grab_focus()
-
-
-func _refresh_restart() -> void:
-	var phase := int(_snapshot.get("phase", PrototypeState.Phase.PLAYING))
-	_restart_button.visible = phase in [PrototypeState.Phase.WON, PrototypeState.Phase.LOST]
-	if phase == PrototypeState.Phase.WON:
-		_restart_button.text = "胜利！重新开始"
-	elif phase == PrototypeState.Phase.LOST:
-		_restart_button.text = "失败，重新开始"
-
-
-func _make_bar(fill_color: Color, title: String) -> ProgressBar:
-	var bar := ProgressBar.new()
-	bar.custom_minimum_size = Vector2(0.0, 30.0)
-	bar.show_percentage = false
-	bar.tooltip_text = title
-	bar.add_theme_stylebox_override("background", _panel_style(Color(0.02, 0.025, 0.032, 0.95), Color(0.18, 0.26, 0.30), 8))
-	bar.add_theme_stylebox_override("fill", _panel_style(fill_color, fill_color.lightened(0.25), 8))
-	var value_label := _make_label(14, Color(0.96, 1.0, 1.0), HORIZONTAL_ALIGNMENT_CENTER)
-	value_label.name = "ValueLabel"
-	value_label.anchor_right = 1.0
-	value_label.anchor_bottom = 1.0
-	value_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	value_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	bar.add_child(value_label)
-	return bar
-
-
-func _set_bar(bar: ProgressBar, value: float, max_value: float, title: String) -> void:
-	bar.max_value = maxf(1.0, max_value)
-	bar.value = clampf(value, 0.0, bar.max_value)
-	var value_text := "%s %.0f/%.0f" % [title, value, max_value]
-	bar.tooltip_text = value_text
-	var value_label := bar.get_node_or_null("ValueLabel") as Label
-	if value_label != null:
-		value_label.text = value_text
-
-
-func _make_hand_card_button(card: Dictionary, index: int) -> Button:
-	var color := _skill_color(String(card.get("skill", "")))
-	var button := Button.new()
-	button.custom_minimum_size = Vector2(0.0, CARD_MIN_HEIGHT)
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.text = ""
-	button.pressed.connect(func(): PrototypeState.try_play_hand(index))
-	_style_button(button, color, 14)
-
-	var content := VBoxContainer.new()
-	content.anchor_right = 1.0
-	content.anchor_bottom = 1.0
-	content.offset_left = 8.0
-	content.offset_top = 8.0
-	content.offset_right = -8.0
-	content.offset_bottom = -8.0
-	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	content.add_theme_constant_override("separation", 5)
-	button.add_child(content)
-
-	var header := HBoxContainer.new()
-	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	content.add_child(header)
-
-	var cost := _make_label(16, Color(1.0, 0.92, 0.64), HORIZONTAL_ALIGNMENT_CENTER)
-	cost.custom_minimum_size = Vector2(30.0, 28.0)
-	cost.text = str(int(card.get("cost", 0)))
-	cost.add_theme_stylebox_override("normal", _panel_style(Color(0.04, 0.08, 0.10, 0.98), Color(0.85, 0.98, 1.0), 14))
-	header.add_child(cost)
-
-	var name_label := _make_label(15, Color(0.96, 1.0, 1.0), HORIZONTAL_ALIGNMENT_LEFT)
-	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.text = String(card.get("name", "卡牌"))
-	header.add_child(name_label)
-
-	var art_panel := PanelContainer.new()
-	art_panel.custom_minimum_size = Vector2(0.0, 72.0)
-	art_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	art_panel.add_theme_stylebox_override("panel", _panel_style(color.darkened(0.35), color.lightened(0.55), 10))
-	content.add_child(art_panel)
-
-	var symbol := _make_label(34, color.lightened(0.78), HORIZONTAL_ALIGNMENT_CENTER)
-	symbol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	symbol.text = _skill_symbol(String(card.get("skill", "")))
-	symbol.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	art_panel.add_child(symbol)
-
-	var effect := _make_label(12, Color(0.82, 0.94, 0.98), HORIZONTAL_ALIGNMENT_LEFT)
-	effect.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	effect.text = String(card.get("text", ""))
-	content.add_child(effect)
-	return button
-
-
-func _make_label(font_size: int, color: Color, alignment: HorizontalAlignment) -> Label:
-	var label := Label.new()
-	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
-	label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.95))
-	label.add_theme_constant_override("outline_size", 3)
-	label.horizontal_alignment = alignment
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.clip_text = true
-	label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-	return label
-
-
-func _make_pile_badge(text: String) -> Label:
-	var label := _make_label(18, Color(0.92, 0.98, 1.0), HORIZONTAL_ALIGNMENT_CENTER)
-	label.text = text
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	return label
-
-
-func _cards_signature(items: Array) -> String:
-	var parts: Array[String] = []
-	for item in items:
-		if item is Dictionary:
-			parts.append(String(item.get("id", item.get("name", ""))))
-	return "|".join(parts)
-
-
-func _style_button(button: Button, color: Color, font_size: int) -> void:
-	button.add_theme_stylebox_override("normal", _panel_style(Color(color.r, color.g, color.b, 0.96), color.lightened(0.45), 16))
-	button.add_theme_stylebox_override("hover", _panel_style(color.lightened(0.12), Color(1.0, 0.95, 0.72), 16))
-	button.add_theme_stylebox_override("pressed", _panel_style(color.darkened(0.1), Color(1.0, 0.86, 0.35), 16))
-	button.add_theme_stylebox_override("disabled", _panel_style(Color(0.10, 0.11, 0.12, 0.82), Color(0.20, 0.22, 0.24), 16))
-	button.add_theme_font_size_override("font_size", font_size)
-	button.add_theme_color_override("font_color", Color(0.96, 0.99, 1.0))
-	button.add_theme_color_override("font_disabled_color", Color(0.48, 0.52, 0.56))
-	button.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.9))
-	button.add_theme_constant_override("outline_size", 3)
-	button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-
-
-func _panel_style(bg: Color, border: Color, radius: int) -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = bg
-	style.border_color = border
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(radius)
-	return style
-
-
-func _on_status_changed(_status: String) -> void:
-	_refresh_top_hud()
+	_style_button(pause_button, "pause")
+	_style_button(discard_pile_button, "pile")
+	_style_button(draw_pile_button, "pile")
+	_style_button(continue_button, "menu")
+	_style_button(restart_button, "menu")
+	_style_progress(exp_bar, Color(0.20, 0.55, 0.95), Color(0.05, 0.08, 0.12))
+	_style_progress(wall_hp_bar, Color(0.08, 0.78, 0.16), Color(0.08, 0.13, 0.08))
+	_style_progress(ultimate_bar, Color(0.95, 0.12, 0.82), Color(0.08, 0.10, 0.25))
+	_style_cards()
 
 
 func _apply_responsive_layout() -> void:
-	var width := _get_display_width()
-	var compact := width <= 700.0
-	if top_bar != null:
-		top_bar.columns = 1 if compact else 2
-	if _hand_panel != null:
-		_hand_panel.offset_top = -390.0 if compact else -365.0
-	if _upgrade_row != null:
-		_upgrade_row.add_theme_constant_override("separation", 10 if compact else 18)
-		for child in _upgrade_row.get_children():
-			(child as Control).custom_minimum_size = Vector2(210.0 if compact else UPGRADE_CARD_WIDTH, UPGRADE_CARD_HEIGHT)
+	var compact := _get_display_width() <= COMPACT_WIDTH
+	top_bar.columns = 1 if compact else 4
+	safe_margin.add_theme_constant_override("margin_left", 8 if compact else 10)
+	safe_margin.add_theme_constant_override("margin_right", 8 if compact else 10)
+	pause_panel.custom_minimum_size.x = minf(360.0, _get_display_width() * MESSAGE_WIDTH_RATIO)
+	_layout_hand_cards(_current_hand_count())
+
+
+func _apply_gameplay_mode() -> void:
+	targeting_hint_label.visible = _gameplay_mode
+	status_label.visible = false
+	hint_label.visible = false
+	bottom_toast_label.visible = false
+
+
+func _update_cards(snapshot: Dictionary, energy: int) -> void:
+	var cards_variant: Variant = snapshot.get("hand_cards", DEFAULT_CARDS)
+	var cards: Array = cards_variant if cards_variant is Array else DEFAULT_CARDS
+	_ensure_card_widget_count(cards.size())
+	for index in range(card_widgets.size()):
+		var widget: Dictionary = card_widgets[index]
+		var is_visible := index < cards.size()
+		(widget["panel"] as PanelContainer).visible = is_visible
+		if not is_visible:
+			continue
+		var card: Dictionary = cards[index] if cards[index] is Dictionary else DEFAULT_CARDS[index % DEFAULT_CARDS.size()]
+		var cost: int = int(card.get("cost", 0))
+		var usable: bool = energy >= cost
+		(widget["cost"] as Label).text = str(cost)
+		(widget["art"] as Label).text = String(card.get("art_slot", "卡牌图片\n资源槽"))
+		(widget["type"] as Label).text = _fit_text(String(card.get("name", "Card")), 7)
+		(widget["name"] as Label).text = ""
+		(widget["desc"] as Label).text = _fit_text(String(card.get("desc", "Ready.")), 22)
+		(widget["school"] as Label).text = _fit_text(String(card.get("school", _school_name(index))), 5)
+		(widget["panel"] as PanelContainer).modulate = Color(1, 1, 1, 1) if usable else Color(0.55, 0.58, 0.62, 0.86)
+		(widget["cost"] as Label).add_theme_color_override("font_color", Color(0.48, 0.84, 1.0) if usable else Color(1.0, 0.34, 0.24))
+	_layout_hand_cards(cards.size())
+
+
+func _update_piles(snapshot: Dictionary) -> void:
+	var discard_count := int(snapshot.get("discard_count", 8))
+	var draw_count := int(snapshot.get("draw_count", 18))
+	discard_pile_button.text = "弃牌\n%d" % discard_count
+	draw_pile_button.text = "牌堆\n%d" % draw_count
+
+
+func _set_progress(bar: ProgressBar, value: float, max_value: float) -> void:
+	bar.max_value = maxf(1.0, max_value)
+	bar.value = clampf(value, 0.0, bar.max_value)
+
+
+func _on_pause_pressed() -> void:
+	_open_pause_overlay()
+
+
+func _open_pause_overlay() -> void:
+	pause_overlay.visible = true
+	continue_button.grab_focus()
+
+
+func _close_pause_overlay() -> void:
+	pause_overlay.visible = false
+	pause_button.grab_focus()
+
+
+func _on_restart_pressed() -> void:
+	_close_pause_overlay()
+	PrototypeState.reset()
+
+
+func _on_discard_pile_pressed() -> void:
+	pass
+
+
+func _on_draw_pile_pressed() -> void:
+	pass
+
+
+func _style_cards() -> void:
+	for widget in card_widgets:
+		_style_card_widget(widget)
+
+
+func _style_card_widget(widget: Dictionary) -> void:
+	var panel: PanelContainer = widget["panel"] as PanelContainer
+	panel.clip_contents = true
+	panel.add_theme_stylebox_override("panel", _card_frame_style())
+	for key in ["cost", "art", "name", "type", "desc", "school"]:
+		var label: Label = widget[key] as Label
+		label.add_theme_color_override("font_color", Color(0.94, 0.84, 0.60))
+		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.82))
+		label.add_theme_constant_override("shadow_offset_x", 2)
+		label.add_theme_constant_override("shadow_offset_y", 2)
+		label.clip_text = true
+	_layout_card_readability_regions(widget)
+	(widget["cost"] as Label).add_theme_font_size_override("font_size", 26)
+	(widget["cost"] as Label).add_theme_color_override("font_color", Color(0.92, 0.98, 1.0))
+	(widget["cost"] as Label).add_theme_color_override("font_outline_color", Color(0.025, 0.05, 0.10, 0.95))
+	(widget["cost"] as Label).add_theme_constant_override("outline_size", 2)
+	(widget["cost"] as Label).add_theme_stylebox_override(
+		"normal", _panel_style(Color(0.04, 0.24, 0.48, 0.99), Color(0.88, 0.75, 0.38, 0.98), 25, 3)
+	)
+	(widget["art"] as Label).add_theme_font_size_override("font_size", 15)
+	(widget["art"] as Label).add_theme_color_override("font_color", Color(0.60, 0.76, 0.84, 0.82))
+	(widget["art"] as Label).add_theme_constant_override("outline_size", 0)
+	(widget["art"] as Label).add_theme_stylebox_override(
+		"normal", _panel_style(Color(0.035, 0.095, 0.125, 0.96), Color(0.18, 0.36, 0.45, 0.78), 3, 1)
+	)
+	(widget["name"] as Label).add_theme_font_size_override("font_size", 15)
+	(widget["name"] as Label).add_theme_color_override("font_color", Color(1.0, 0.88, 0.50))
+	(widget["type"] as Label).add_theme_font_size_override("font_size", 20)
+	(widget["type"] as Label).add_theme_color_override("font_color", Color(1.0, 0.95, 0.86))
+	(widget["type"] as Label).add_theme_color_override("font_outline_color", Color(0.10, 0.025, 0.018, 0.96))
+	(widget["type"] as Label).add_theme_constant_override("outline_size", 2)
+	(widget["type"] as Label).add_theme_stylebox_override(
+		"normal", _panel_style(Color(0.38, 0.055, 0.035, 0.98), Color(0.78, 0.58, 0.30, 0.95), 4, 2)
+	)
+	(widget["desc"] as Label).add_theme_font_size_override("font_size", 15)
+	(widget["desc"] as Label).add_theme_color_override("font_color", Color(0.98, 0.94, 0.82))
+	(widget["desc"] as Label).add_theme_color_override("font_outline_color", Color(0.04, 0.035, 0.03, 0.94))
+	(widget["desc"] as Label).add_theme_constant_override("outline_size", 1)
+	(widget["desc"] as Label).add_theme_stylebox_override(
+		"normal", _panel_style(Color(0.16, 0.15, 0.20, 0.95), Color(0.58, 0.46, 0.28, 0.82), 4, 1)
+	)
+	(widget["school"] as Label).add_theme_font_size_override("font_size", 13)
+	(widget["school"] as Label).add_theme_color_override("font_color", Color(0.10, 0.075, 0.04))
+	(widget["school"] as Label).add_theme_constant_override("outline_size", 0)
+	(widget["school"] as Label).add_theme_stylebox_override(
+		"normal", _panel_style(Color(0.86, 0.69, 0.40, 0.98), Color(0.32, 0.22, 0.12, 0.98), 8, 1)
+	)
+
+
+func _layout_card_readability_regions(widget: Dictionary) -> void:
+	var cost: Label = widget["cost"] as Label
+	cost.position = Vector2(4.0, 4.0)
+	cost.size = Vector2(38.0, 38.0)
+	cost.z_index = 0
+	cost.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cost.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	var name: Label = widget["name"] as Label
+	name.visible = false
+	name.position = Vector2(45.0, 42.0)
+	name.size = Vector2(96.0, 18.0)
+	name.z_index = 0
+	name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	var type_label: Label = widget["type"] as Label
+	type_label.position = Vector2(25.0, 8.0)
+	type_label.size = Vector2(119.0, 34.0)
+	type_label.z_index = 0
+	type_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	type_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	var art: Label = widget["art"] as Label
+	art.position = Vector2(15.0, 58.0)
+	art.size = Vector2(120.0, 84.0)
+	art.z_index = 0
+	art.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	art.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	var desc: Label = widget["desc"] as Label
+	desc.position = Vector2(12.0, 154.0)
+	desc.size = Vector2(126.0, 66.0)
+	desc.z_index = 0
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	var school: Label = widget["school"] as Label
+	school.position = Vector2(38.0, 224.0)
+	school.size = Vector2(74.0, 24.0)
+	school.z_index = 0
+	school.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	school.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+
+func _ensure_card_widget_count(count: int) -> void:
+	while card_widgets.size() < count:
+		var source_panel: PanelContainer = card_widgets[0]["panel"] as PanelContainer
+		var panel := source_panel.duplicate() as PanelContainer
+		_clear_unique_names(panel)
+		panel.name = "Card%d" % (card_widgets.size() + 1)
+		hand_layer.add_child(panel)
+		var widget := _card_widget_from_panel(panel)
+		card_widgets.append(widget)
+		_style_card_widget(widget)
+
+
+func _card_widget_from_panel(panel: PanelContainer) -> Dictionary:
+	return {
+		"panel": panel,
+		"cost": _find_label_by_suffix(panel, "CostLabel"),
+		"art": _find_label_by_suffix(panel, "ArtLabel"),
+		"name": _find_label_by_suffix(panel, "NameLabel"),
+		"type": _find_label_by_suffix(panel, "TypeLabel"),
+		"desc": _find_label_by_suffix(panel, "DescLabel"),
+		"school": _find_label_by_suffix(panel, "SchoolIconLabel"),
+	}
+
+
+func _find_label_by_suffix(node: Node, suffix: String) -> Label:
+	for child in node.get_children():
+		if child is Label and String(child.name).ends_with(suffix):
+			return child as Label
+		var found := _find_label_by_suffix(child, suffix)
+		if found != null:
+			return found
+	return null
+
+
+func _clear_unique_names(node: Node) -> void:
+	node.unique_name_in_owner = false
+	for child in node.get_children():
+		_clear_unique_names(child)
+
+
+func _layout_hand_cards(visible_count: int) -> void:
+	if visible_count <= 0:
+		return
+	var hand_width := hand_layer.size.x
+	if hand_width <= 0.0:
+		hand_width = 1080.0
+	var count_pressure := clampf(float(visible_count - 5) / 7.0, 0.0, 1.0)
+	var overflow_pressure := clampf(float(visible_count - 10) / 4.0, 0.0, 1.0)
+	var card_scale := lerpf(lerpf(HAND_CARD_BASE_SCALE, HAND_CARD_DENSE_SCALE, count_pressure), HAND_CARD_OVERFLOW_SCALE, overflow_pressure)
+	var scaled_card_size := HAND_CARD_SIZE * card_scale
+	var center_min := HAND_CARD_SAFE_SIDE + scaled_card_size.x * 0.5
+	var center_max := maxf(center_min, hand_width - HAND_CARD_SAFE_SIDE - scaled_card_size.x * 0.5)
+	var available_span := center_max - center_min
+	var overlap_spacing_ratio := _hand_overlap_spacing_ratio(visible_count)
+	var desired_span := scaled_card_size.x * overlap_spacing_ratio * float(maxi(0, visible_count - 1))
+	var center_span := minf(available_span, desired_span)
+	center_min = hand_width * 0.5 - center_span * 0.5
+	var max_rotation := lerpf(HAND_CARD_MAX_ROTATION, HAND_CARD_MIN_ROTATION, count_pressure)
+	var edge_drop := lerpf(HAND_CARD_EDGE_DROP, 12.0, count_pressure)
+	var top_y := HAND_CARD_TOP + lerpf(0.0, 24.0, count_pressure)
+
+	for index in range(card_widgets.size()):
+		var panel: PanelContainer = card_widgets[index]["panel"] as PanelContainer
+		if index >= visible_count:
+			panel.visible = false
+			continue
+		var ratio := 0.5
+		if visible_count > 1:
+			ratio = float(index) / float(visible_count - 1)
+		var signed := ratio * 2.0 - 1.0
+		var center_x := center_min + center_span * ratio
+		var top_offset := top_y + absf(signed) * edge_drop
+		panel.visible = true
+		panel.size = HAND_CARD_SIZE
+		panel.scale = Vector2(card_scale, card_scale)
+		panel.pivot_offset = HAND_CARD_SIZE * 0.5
+		panel.position = Vector2(center_x - HAND_CARD_SIZE.x * 0.5, top_offset)
+		panel.rotation = signed * max_rotation
+		panel.z_index = 100 + index
+
+
+func _hand_overlap_spacing_ratio(visible_count: int) -> float:
+	if visible_count <= 1:
+		return 0.0
+	if visible_count <= 3:
+		return 0.72
+	if visible_count == 4:
+		return 0.62
+	if visible_count == 5:
+		return 0.56
+	return maxf(0.38, 0.48 - float(visible_count - 6) * 0.025)
+
+
+func _current_hand_count() -> int:
+	if _snapshot.is_empty():
+		return DEFAULT_CARDS.size()
+	var cards_variant: Variant = _snapshot.get("hand_cards", DEFAULT_CARDS)
+	if cards_variant is Array:
+		return (cards_variant as Array).size()
+	return DEFAULT_CARDS.size()
+
+
+func _school_name(index: int) -> String:
+	var names := ["冰霜", "穿透", "维修", "落雷", "防线"]
+	return names[index % names.size()]
+
+
+func _style_button(button: Button, kind: String) -> void:
+	var bg := Color(0.105, 0.095, 0.078, 0.96)
+	var border := Color(0.56, 0.46, 0.27, 0.92)
+	if kind == "pause":
+		bg = Color(0.090, 0.082, 0.068, 0.98)
+	if kind == "menu":
+		bg = Color(0.145, 0.132, 0.102, 0.98)
+	button.add_theme_stylebox_override("normal", _panel_style(bg, border, 7))
+	button.add_theme_stylebox_override("hover", _panel_style(bg.lightened(0.10), border.lightened(0.12), 7))
+	button.add_theme_stylebox_override("pressed", _panel_style(bg.darkened(0.12), border, 7))
+	button.add_theme_color_override("font_color", Color(0.95, 0.90, 0.78))
+	button.add_theme_color_override("font_hover_color", Color(1.0, 0.92, 0.55))
+	button.add_theme_font_size_override("font_size", 24)
+
+
+func _style_progress(bar: ProgressBar, fill: Color, background: Color) -> void:
+	bar.add_theme_stylebox_override("background", _panel_style(background, Color(0.30, 0.26, 0.18, 0.92), 5, 1))
+	bar.add_theme_stylebox_override("fill", _panel_style(fill, fill.lightened(0.10), 5, 1))
+
+
+func _panel_style(bg: Color, border: Color, radius: int, border_width: int = 2) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = bg
+	style.border_color = border
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(radius)
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.30)
+	style.shadow_size = 5
+	style.shadow_offset = Vector2(0.0, 2.0)
+	return style
+
+
+func _card_frame_style() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.075, 0.064, 0.052, 0.99)
+	style.border_color = Color(0.78, 0.60, 0.30, 0.96)
+	style.set_border_width_all(3)
+	style.set_corner_radius_all(5)
+	style.content_margin_left = 5.0
+	style.content_margin_right = 5.0
+	style.content_margin_top = 5.0
+	style.content_margin_bottom = 5.0
+	style.shadow_color = Color(0.0, 0.0, 0.0, 0.55)
+	style.shadow_size = 9
+	style.shadow_offset = Vector2(0.0, 5.0)
+	return style
+
+
+func _plain_panel_style(bg: Color, radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = bg
+	style.set_corner_radius_all(radius)
+	style.content_margin_left = 2.0
+	style.content_margin_right = 2.0
+	style.content_margin_top = 0.0
+	style.content_margin_bottom = 0.0
+	return style
+
+
+func _compact_panel_style(bg: Color, border: Color, radius: int, border_width: int) -> StyleBoxFlat:
+	var style := _panel_style(bg, border, radius, border_width)
+	style.content_margin_left = 8.0
+	style.content_margin_right = 8.0
+	style.content_margin_top = 4.0
+	style.content_margin_bottom = 4.0
+	style.shadow_size = 2
+	style.shadow_offset = Vector2(0.0, 1.0)
+	return style
+
+
+func _all_labels() -> Array:
+	return [
+		time_label,
+		stage_label,
+		wave_label,
+		level_title_label,
+		level_value_label,
+		exp_value_label,
+		objective_label,
+		status_label,
+		targeting_hint_label,
+		ammo_value_label,
+		%DefenseWallLabel,
+		%WallHpTitleLabel,
+		wall_hp_icon_label,
+		wall_hp_value_label,
+		%EnergyTitleLabel,
+		energy_value_label,
+		%HeroPortraitLabel,
+		hero_name_label,
+		ultimate_cost_label,
+		%UltimateTitleLabel,
+		hint_label,
+		bottom_toast_label,
+		pause_title_label,
+		pause_summary_label,
+	]
 
 
 func _get_display_width() -> float:
 	var visible_width := get_viewport().get_visible_rect().size.x
-	var window_width := float(get_window().size.x)
-	return minf(visible_width, window_width) if window_width > 0.0 else visible_width
+	_layout_width = visible_width
+	return _layout_width
 
 
-func _skill_color(skill: String) -> Color:
-	match skill:
-		"thermobaric":
-			return Color(0.48, 0.14, 0.08)
-		"dry_ice":
-			return Color(0.06, 0.26, 0.42)
-		"electro_pierce":
-			return Color(0.22, 0.12, 0.46)
-	return Color(0.16, 0.20, 0.25)
+func _format_time(seconds: float) -> String:
+	var total: int = maxi(0, int(seconds))
+	return "%02d:%02d" % [floori(float(total) / 60.0), total % 60]
 
 
-func _skill_symbol(skill: String) -> String:
-	match skill:
-		"thermobaric":
-			return "炎"
-		"dry_ice":
-			return "冰"
-		"electro_pierce":
-			return "电"
-	return "技"
+func _fit_text(text: String, max_chars: int) -> String:
+	if text.length() <= max_chars:
+		return text
+	return text.left(maxi(1, max_chars - 3)) + "..."
+
+
+func _school_icon(index: int) -> String:
+	var icons := ["❄", "✦", "⚙", "◇", "◆"]
+	return icons[index % icons.size()]
+
+
+func _clean_label_prefix(text: String) -> String:
+	for prefix in ["目标：", "目标:"]:
+		if text.begins_with(prefix):
+			return text.substr(prefix.length())
+	return text

@@ -169,8 +169,19 @@ AI 每轮按这个顺序推进：
 - UI sprite 提取、PSD/PNG UI 处理：`.agents/skills/ui-studio/SKILL.md`
 - 精灵切图和动画条：`.agents/skills/godot-sprite-pipeline/SKILL.md`
 - Godot API 查询：`.agents/skills/godot-api-lookup/SKILL.md`
+- Godot API 精确校验：`.agents/skills/godot-api-check/SKILL.md`
 - GodotMCP / MCP 编辑器桥接：`.agents/skills/godot-mcp/SKILL.md`
 - 玩法与中度/混合系统拆解：`docs/GAME_DESIGN_GUIDE.md`
+
+## Godot API 铁律
+
+- 凡是 Godot 引擎 API，一律不得凭记忆使用。
+- 必须先通过 `godot-api-check` skill 查询 `extension_api.json`。
+- 查询不到的 API 一律视为不存在，禁止调用、禁止建议、禁止写入代码。
+- 涉及类、内置类型、方法、属性、信号、枚举、枚举值、常量、单例、utility function、operator、constructor 时，都必须查询到确切符号、参数、返回值和约束后再使用。
+- 同一轮任务中只有已经查询并留在上下文里的精确符号可以复用；新增符号或新增 overload 必须再次查询。
+- 项目自定义类、节点、Autoload、输入动作、资源路径、场景路径、分组和项目设置必须在仓库文件中验证，不得臆造。
+- 如果无法完成查询或验证，必须停止并说明阻塞原因，不得用记忆补全。
 
 ## 图片生成规则
 
@@ -230,6 +241,8 @@ AI 每轮按这个顺序推进：
 - 快速首启检查：`python scripts/check_env.py --json --fast`
 - 完整环境检查：`python scripts/check_env.py --json`
 - GodotMCP 配置生成：`python scripts/setup_godot_mcp.py --provider auto`
+- 导出 Godot API dump：`New-Item -ItemType Directory -Force .godot-api; Push-Location .godot-api; godot --headless --dump-extension-api; Pop-Location`
+- 查询 Godot API 符号：`python .agents/skills/godot-api-check/scripts/godot_api_check.py class Node`
 - AI 客户端项目级 MCP 自动配置：`python scripts/setup_ai_mcp.py --apply-project`
 - AI 客户端用户级 MCP 注册（显式确认后）：`python scripts/setup_ai_mcp.py --client codex --apply-user` 或 `python scripts/setup_ai_mcp.py --client claude --apply-user`
 - 创建子 Agent 任务包：`python scripts/agent_task.py create --demand-id <ID> --task-id T-01 --role gameplay --goal "..." --allowed-path src/game/PrototypeState.gd`

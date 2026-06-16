@@ -2,28 +2,33 @@
 
 ## 概念ID
 
-- `vertical-defense-card-v1`
+- `starter-template`
 
 ## 一句话目标
 
-- 竖屏手机 Web 防线卡牌游戏：固定时间刷怪，自动枪械保底输出，玩家用能量即时出牌，通过费用连锁倍率和升级三选一把温压弹、干冰弹、电磁穿刺三种流派构筑成型，守住城墙并击败 5 分钟 Boss。
+- 当前模板处于空脚手架状态，无内置游戏，等待用户通过 init 创建新游戏。
 
 ## 设定来源
 
-- 用户策划文档：`策划文档/`
+- 用户原始输入：`未提供长设定`
+- AI 提炼稿：`未单独保存`
 - 兼容事实源：`docs/game-concept.md`
 
 ## 平台与目标层级
 
-- 平台：手机 Web
-- 画面方向：竖屏
-- 逻辑基准分辨率：1080 x 1920
-- 目标层级：完整首版可试玩 demo
+- 平台：待确认
+- 目标层级：空脚手架
+
+## 核心玩法
+
+- 核心操作：待创建新游戏后写入。
+- 立即反馈：待创建新游戏后写入。
+- 一轮结束：待创建新游戏后写入。
+- 玩法不变量：待创建新游戏后写入。
 
 ## 玩法蓝图
 
-- hybrid
-- roguelite
+- starter_template
 
 ## 详细文档索引
 
@@ -31,12 +36,12 @@
 - 内容单元：`docs/project/gameplay/content-units.md`
 - 数值与平衡：`docs/project/gameplay/balance.md`
 - 系统文档：`docs/project/gameplay/systems/`
+- 美术方向：`docs/project/art/art-direction.md`
 - 风格指南：`docs/project/art/style-guide.md`
-- 运行时素材清单：`docs/project/art/asset-manifest.json`
 - UI/HUD：`docs/project/ui/hud-spec.md`
 
 ## 首版边界
 
-- 完成 3 个系统阶段：基础防线、精英压迫、Boss 检定。
-- 启用系统：时间轴刷怪、城墙、自动枪械、能量、4 手牌、弃牌、连锁、同名冷却、三流派卡牌、升级三选一、结算重开、本地进度。
-- 裁剪系统：背包格子、装备掉落、剧情养成、联网账号和正式美术资产库。
+- 默认先完成至少 3 个有差异内容单元、挑战或系统阶段。
+- 基础闭环只作为首版的一部分，不作为真实游戏交付目标。
+- 复杂系统必须拆到独立系统文档；开发需求写入 `.pm/`。

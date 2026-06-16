@@ -1,0 +1,33 @@
+{
+  "concept_id": "vertical-defense-card-v1",
+  "status": "procedural_placeholder",
+  "assets": [
+    {
+      "id": "runtime_battle_shapes",
+      "role": "player_actor challenge_actor background_map fx",
+      "source": "procedural",
+      "runtime_path": "res://assets/generated/runtime/procedural_battle_placeholder.txt",
+      "runtime_bound": true,
+      "screenshot_visible": false,
+      "notes": "程序化绘制玩家炮台、城墙、怪物、Boss、弹道和 VFX，占位素材不计入正式美术完成。"
+    },
+    {
+      "id": "runtime_hud_stylebox",
+      "role": "ui_skin",
+      "source": "procedural",
+      "runtime_path": "res://assets/ui/procedural_hud_placeholder.txt",
+      "runtime_bound": true,
+      "screenshot_visible": false,
+      "notes": "程序化 HUD、手牌按钮、弃牌按钮、升级按钮和结算按钮。"
+    },
+    {
+      "id": "vfx_library_particle_fallbacks",
+      "role": "fx",
+      "source": "placeholder",
+      "runtime_path": "res://addons/vfx_library/effects/torch_fire.tscn",
+      "runtime_bound": true,
+      "screenshot_visible": false,
+      "notes": "内置 VFX addon 示例场景改用内嵌 GradientTexture2D，避免缺失贴图导致运行日志报错。"
+    }
+  ]
+}

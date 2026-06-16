@@ -89,6 +89,7 @@ SECTIONS = [
     (
         "素材与资源",
         [
+            (".godot-api/extension_api.json", "Godot 引擎 API dump；供 godot-api-check 校验类、成员、信号、枚举和重载。"),
             ("assets/", "游戏运行时素材根目录；正式素材必须放在这里或 addons。"),
             ("assets/sprites/", "角色、敌人、目标、场景元素和动画帧。"),
             ("assets/ui/", "HUD 图标、按钮、面板、进度条和 UI sprite。"),
@@ -131,6 +132,7 @@ SECTIONS = [
         "AI 协作与过程状态",
         [
             (".agents/skills/", "内置 Skill；Skill 负责流程，稳定项目事实应沉淀到 docs/project 或脚手架文档。"),
+            (".agents/skills/godot-api-check/", "Godot API 校验 skill；改 Godot 引擎 API 前必须查询 extension_api.json。"),
             (".agents/roles/", "多 Agent 角色说明。"),
             (".pm/project/", "PM backlog、归档和 handoff 状态源；不要手动编辑 JSON。"),
             (".pm/workspaces/", "需求 workspace、notes 和 artifacts；过程记录放这里，不放长期设定。"),
@@ -169,6 +171,7 @@ EXAMPLE_INDEX = [
     ("Web 体验检查", "scripts/experience_check.py", "浏览器预览、截图和输入探针脚本示例。"),
     ("严格审查入口", "scripts/ai_review.py", "多维度 review 聚合和 FAIL/CONCERNS 处理示例。"),
     ("多 Agent 任务", "scripts/agent_task.py", "任务包和 allowed_paths 生成示例。"),
+    ("Godot API 校验", ".agents/skills/godot-api-check/scripts/godot_api_check.py", "基于 .godot-api/extension_api.json 精确验证引擎类、成员、信号、枚举、单例和工具函数。"),
 ]
 
 

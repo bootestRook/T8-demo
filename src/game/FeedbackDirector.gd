@@ -3,7 +3,7 @@ extends Node
 # 视觉反馈统一入口。空脚手架不预置玩法反馈，新游戏按事件扩展即可。
 
 var _screen_shake_tween: Tween
-var _screen_shake_target: Node2D
+var _screen_shake_target: Node
 var _screen_shake_offset := Vector2.ZERO
 var _flash_tweens: Dictionary = {}
 var _flash_original_modulates: Dictionary = {}
@@ -22,8 +22,8 @@ func play_feedback(event_id: StringName, context: Dictionary = {}) -> void:
 
 
 func screen_shake(intensity: float = 8.0, duration: float = 0.16) -> void:
-	var scene := get_tree().current_scene as Node2D
-	if scene == null:
+	var scene := get_tree().current_scene
+	if scene == null or not scene.has_method("set_screen_feedback_offset"):
 		return
 	if _screen_shake_tween != null:
 		_screen_shake_tween.kill()
@@ -108,7 +108,7 @@ func _feedback_parent(payload: Dictionary) -> Node:
 
 func _revert_screen_shake_offset() -> void:
 	if is_instance_valid(_screen_shake_target) and _screen_shake_offset != Vector2.ZERO:
-		_screen_shake_target.position -= _screen_shake_offset
+		_screen_shake_target.call("set_screen_feedback_offset", Vector2.ZERO)
 	_screen_shake_offset = Vector2.ZERO
 
 
@@ -116,5 +116,5 @@ func _set_screen_shake_offset(offset: Vector2) -> void:
 	if not is_instance_valid(_screen_shake_target):
 		_screen_shake_offset = Vector2.ZERO
 		return
-	_screen_shake_target.position += offset - _screen_shake_offset
+	_screen_shake_target.call("set_screen_feedback_offset", offset)
 	_screen_shake_offset = offset

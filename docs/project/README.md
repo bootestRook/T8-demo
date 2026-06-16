@@ -4,7 +4,7 @@
 
 ## 当前概念
 
-- 概念ID：`card-rpg-vampire-crawler-ballbylon`
+- 概念ID：`starter-template`
 - 事实源：`game-concept.md`
 
 ## 推荐读取顺序

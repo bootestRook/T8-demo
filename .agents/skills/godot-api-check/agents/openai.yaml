@@ -1,0 +1,4 @@
+interface:
+  display_name: "Godot API Check"
+  short_description: "用 extension_api.json 校验 Godot 引擎 API 符号。"
+  default_prompt: "使用 godot-api-check 校验 Godot 类、成员、信号、枚举或工具函数是否存在。"

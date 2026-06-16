@@ -74,11 +74,12 @@
 
 | 路径 | 状态 | 作用 |
 |---|---|---|
+| `.godot-api/extension_api.json` | 存在 | Godot 引擎 API dump；供 godot-api-check 校验类、成员、信号、枚举和重载。 |
 | `assets/` | 存在 | 游戏运行时素材根目录；正式素材必须放在这里或 addons。 |
 | `assets/sprites/` | 存在 | 角色、敌人、目标、场景元素和动画帧。 |
 | `assets/ui/` | 存在 | HUD 图标、按钮、面板、进度条和 UI sprite。 |
 | `assets/generated/runtime/` | 存在 | 生成后整理进入运行时的素材包。 |
-| `assets/generated/style_candidates/` | 存在 | 首启风格候选图；只能作为风格锚点，不能直接当运行时素材。 |
+| `assets/generated/style_candidates/` | 待创建/按需 | 首启风格候选图；只能作为风格锚点，不能直接当运行时素材。 |
 | `addons/` | 存在 | Godot addon 和运行时可加载扩展。 |
 | `addons/vfx_library/` | 存在 | 内置 VFX Library，默认只接轻量反馈。 |
 | `references/` | 存在 | 参考资料目录，禁止运行时代码直接加载。 |
@@ -116,6 +117,7 @@
 | 路径 | 状态 | 作用 |
 |---|---|---|
 | `.agents/skills/` | 存在 | 内置 Skill；Skill 负责流程，稳定项目事实应沉淀到 docs/project 或脚手架文档。 |
+| `.agents/skills/godot-api-check/` | 存在 | Godot API 校验 skill；改 Godot 引擎 API 前必须查询 extension_api.json。 |
 | `.agents/roles/` | 存在 | 多 Agent 角色说明。 |
 | `.pm/project/` | 过程状态源/本地 | PM backlog、归档和 handoff 状态源；不要手动编辑 JSON。 |
 | `.pm/workspaces/` | 过程记录/本地 | 需求 workspace、notes 和 artifacts；过程记录放这里，不放长期设定。 |
@@ -143,6 +145,7 @@
 | Web 体验检查 | `scripts/experience_check.py` | 浏览器预览、截图和输入探针脚本示例。 |
 | 严格审查入口 | `scripts/ai_review.py` | 多维度 review 聚合和 FAIL/CONCERNS 处理示例。 |
 | 多 Agent 任务 | `scripts/agent_task.py` | 任务包和 allowed_paths 生成示例。 |
+| Godot API 校验 | `.agents/skills/godot-api-check/scripts/godot_api_check.py` | 基于 .godot-api/extension_api.json 精确验证引擎类、成员、信号、枚举、单例和工具函数。 |
 
 ## 维护规则
 
