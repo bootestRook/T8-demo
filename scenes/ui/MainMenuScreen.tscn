@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://cqc0pk2xas13w"]
+
+[ext_resource type="Script" uid="uid://ctjhuoo6yq4lu" path="res://src/ui/MainMenuScreen.gd" id="1"]
+
+[node name="MainMenuScreen" type="CanvasLayer" unique_id=1337135667]
+layer = 30
+script = ExtResource("1")
+
+[node name="Root" type="Control" parent="." unique_id=578334692]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="Root" unique_id=2094247816]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.97, 0.97, 0.95, 1)
+
+[node name="RuleArea" type="MarginContainer" parent="Root" unique_id=1057363650]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 24.0
+offset_bottom = 500.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 78
+theme_override_constants/margin_top = 54
+theme_override_constants/margin_right = 78
+theme_override_constants/margin_bottom = 54
+
+[node name="RuleList" type="VBoxContainer" parent="Root/RuleArea" unique_id=1048908964]
+layout_mode = 2
+theme_override_constants/separation = 26
+
+[node name="RuleChainLabel" type="Label" parent="Root/RuleArea/RuleList" unique_id=1260026275]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1. 连锁概念
+费用连续递增，连锁倍率递增。"
+vertical_alignment = 1
+
+[node name="RuleInheritLabel" type="Label" parent="Root/RuleArea/RuleList" unique_id=2032649438]
+unique_name_in_owner = true
+layout_mode = 2
+text = "2. 连锁效果传承
+连锁期间，同流派继承前牌效果。"
+vertical_alignment = 1
+
+[node name="Center" type="CenterContainer" parent="Root" unique_id=1241652145]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MenuLayout" type="VBoxContainer" parent="Root/Center" unique_id=1514970188]
+custom_minimum_size = Vector2(560, 260)
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Root/Center/MenuLayout" unique_id=1214031948]
+unique_name_in_owner = true
+layout_mode = 2
+text = "通关状态"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelRow" type="HBoxContainer" parent="Root/Center/MenuLayout" unique_id=1091670225]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_override_constants/separation = 22
+alignment = 1
+
+[node name="PreviousLevelButton" type="Button" parent="Root/Center/MenuLayout/LevelRow" unique_id=1496023524]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(62, 58)
+layout_mode = 2
+text = "<"
+
+[node name="LevelLabel" type="Label" parent="Root/Center/MenuLayout/LevelRow" unique_id=1797320629]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(285, 58)
+layout_mode = 2
+text = "关卡.关卡名"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NextLevelButton" type="Button" parent="Root/Center/MenuLayout/LevelRow" unique_id=1440123176]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(62, 58)
+layout_mode = 2
+text = ">"
+
+[node name="StartGameButton" type="Button" parent="Root/Center/MenuLayout" unique_id=748795645]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(285, 72)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "开始游戏"

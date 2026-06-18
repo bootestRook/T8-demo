@@ -1,0 +1,302 @@
+{
+  "thermobaric_probe": {
+    "card_name": "试射温压弹",
+    "school": "温压弹",
+    "type": "试射",
+    "icon": "温",
+    "text": "本次连锁爆炸伤害+20%",
+    "cost": 0
+  },
+  "thermobaric_pressure_calibration": {
+    "card_name": "压力校准弹",
+    "school": "温压弹",
+    "type": "校准",
+    "icon": "温",
+    "text": "本次连锁爆炸范围+20%",
+    "cost": 1
+  },
+  "thermobaric_barrage": {
+    "card_name": "温压弹连发",
+    "school": "温压弹",
+    "type": "连发",
+    "icon": "温",
+    "text": "额外释放1枚温压弹，伤害-20%",
+    "cost": 3
+  },
+  "thermal_explosion": {
+    "card_name": "热能爆炸",
+    "school": "温压弹",
+    "type": "爆炸",
+    "icon": "温",
+    "text": "的爆炸伤害+80%",
+    "cost": 2
+  },
+  "thermobaric_impact": {
+    "card_name": "温压冲击",
+    "school": "温压弹",
+    "type": "冲击",
+    "icon": "温",
+    "text": "的冲击伤害+80%，爆炸击退+75%",
+    "cost": 2
+  },
+  "thermal_burst": {
+    "card_name": "热能爆发",
+    "school": "温压弹",
+    "type": "范围",
+    "icon": "温",
+    "text": "的爆炸范围+20%",
+    "cost": 3
+  },
+  "thermal_ignite": {
+    "card_name": "热能引燃",
+    "school": "温压弹",
+    "type": "燃烧",
+    "icon": "温",
+    "text": "爆炸会燃烧怪物2秒",
+    "cost": 2
+  },
+  "rich_fuel_fill": {
+    "card_name": "富燃料填充",
+    "school": "温压弹",
+    "type": "增伤",
+    "icon": "温",
+    "text": "伤害+20%",
+    "cost": 1
+  },
+  "explosion_sparks": {
+    "card_name": "爆炸火花",
+    "school": "温压弹",
+    "type": "火花",
+    "icon": "温",
+    "text": "爆炸后释放1个火花弹道",
+    "cost": 4
+  },
+  "thermobaric_draw_supply": {
+    "card_name": "温压补给",
+    "school": "温压弹",
+    "type": "过牌",
+    "icon": "温",
+    "text": "伤害-20%，从牌库抽2张温压弹牌",
+    "cost": 1
+  },
+  "dry_ice_probe": {
+    "card_name": "试射干冰弹",
+    "school": "干冰弹",
+    "type": "试射",
+    "icon": "冰",
+    "text": "本次连锁伤害+15%",
+    "cost": 0
+  },
+  "condensation_calibration": {
+    "card_name": "冷凝校准弹",
+    "school": "干冰弹",
+    "type": "校准",
+    "icon": "冰",
+    "text": "本次连锁穿透+1",
+    "cost": 1
+  },
+  "scatter_small_ice": {
+    "card_name": "散射小冰弹",
+    "school": "干冰弹",
+    "type": "分裂",
+    "icon": "冰",
+    "text": "首次命中后分裂为3个小冰弹",
+    "cost": 1
+  },
+  "low_temperature_pierce": {
+    "card_name": "低温贯穿",
+    "school": "干冰弹",
+    "type": "穿透",
+    "icon": "冰",
+    "text": "伤害+30%，穿透+2",
+    "cost": 2
+  },
+  "condensed_heavy_ice": {
+    "card_name": "凝霜重冰",
+    "school": "干冰弹",
+    "type": "重冰",
+    "icon": "冰",
+    "text": "弹道速度-30%，伤害+50%，穿透+1",
+    "cost": 2
+  },
+  "dry_ice_damage_boost": {
+    "card_name": "干冰弹增伤",
+    "school": "干冰弹",
+    "type": "增伤",
+    "icon": "冰",
+    "text": "干冰弹伤害+60%",
+    "cost": 2
+  },
+  "flash_freeze_ice": {
+    "card_name": "急冻寒冰",
+    "school": "干冰弹",
+    "type": "冻结",
+    "icon": "冰",
+    "text": "伤害+30%，命中后会冻结怪物2秒",
+    "cost": 3
+  },
+  "dry_ice_barrage": {
+    "card_name": "干冰弹连发",
+    "school": "干冰弹",
+    "type": "连发",
+    "icon": "冰",
+    "text": "额外释放1枚，伤害-20%",
+    "cost": 3
+  },
+  "frostbite_invasion": {
+    "card_name": "冰冻侵袭",
+    "school": "干冰弹",
+    "type": "冻伤",
+    "icon": "冰",
+    "text": "命中后施加10秒可叠加5次的冻伤",
+    "cost": 3
+  },
+  "dry_ice_volley": {
+    "card_name": "干冰弹齐射",
+    "school": "干冰弹",
+    "type": "齐射",
+    "icon": "冰",
+    "text": "干冰弹数量+1",
+    "cost": 4
+  },
+  "heavy_ice_pierce": {
+    "card_name": "重冰穿透",
+    "school": "干冰弹",
+    "type": "穿透",
+    "icon": "冰",
+    "text": "击退+20%，穿透+2",
+    "cost": 4
+  },
+  "dry_ice_draw_supply": {
+    "card_name": "干冰补给",
+    "school": "干冰弹",
+    "type": "过牌",
+    "icon": "冰",
+    "text": "伤害-20%，从牌库抽2张干冰弹牌",
+    "cost": 1
+  },
+  "capacitor_test": {
+    "card_name": "电容试放",
+    "school": "电磁穿刺",
+    "type": "试放",
+    "icon": "电",
+    "text": "本次连锁伤害+20%",
+    "cost": 0
+  },
+  "magnetic_pole_calibration": {
+    "card_name": "磁极校准",
+    "school": "电磁穿刺",
+    "type": "校准",
+    "icon": "电",
+    "text": "本次连锁范围+20%",
+    "cost": 1
+  },
+  "electro_explosion": {
+    "card_name": "电磁爆炸",
+    "school": "电磁穿刺",
+    "type": "爆炸",
+    "icon": "电",
+    "text": "命中追加一次小范围爆炸",
+    "cost": 1
+  },
+  "electro_explosion_damage": {
+    "card_name": "电磁爆炸增伤",
+    "school": "电磁穿刺",
+    "type": "增伤",
+    "icon": "电",
+    "text": "爆炸伤害+80%",
+    "cost": 2
+  },
+  "electro_explosion_expand": {
+    "card_name": "电磁爆炸扩张",
+    "school": "电磁穿刺",
+    "type": "扩张",
+    "icon": "电",
+    "text": "爆炸范围+20%",
+    "cost": 2
+  },
+  "electro_matrix": {
+    "card_name": "电磁矩阵",
+    "school": "电磁穿刺",
+    "type": "矩阵",
+    "icon": "电",
+    "text": "爆炸范围内生成低伤害和减速效果的电磁矩阵，持续1秒",
+    "cost": 3
+  },
+  "electro_diversion": {
+    "card_name": "电磁分流",
+    "school": "电磁穿刺",
+    "type": "分流",
+    "icon": "电",
+    "text": "额外释放1次，伤害-20%",
+    "cost": 2
+  },
+  "paralyze_damage": {
+    "card_name": "麻痹增伤",
+    "school": "电磁穿刺",
+    "type": "麻痹",
+    "icon": "电",
+    "text": "伤害+30%，麻痹时间+1.5秒",
+    "cost": 3
+  },
+  "electro_fission": {
+    "card_name": "电磁裂变",
+    "school": "电磁穿刺",
+    "type": "裂变",
+    "icon": "电",
+    "text": "落点命中后向2个方向释放电磁粒子",
+    "cost": 4
+  },
+  "electro_diversion_plus": {
+    "card_name": "电磁分流+",
+    "school": "电磁穿刺",
+    "type": "分流",
+    "icon": "电",
+    "text": "额外释放1次",
+    "cost": 4
+  },
+  "electro_draw_supply": {
+    "card_name": "电磁补给",
+    "school": "电磁穿刺",
+    "type": "过牌",
+    "icon": "电",
+    "text": "伤害-20%，从牌库抽2张电磁穿刺牌",
+    "cost": 1
+  },
+  "wildcard_link": {
+    "card_name": "通用万能牌",
+    "school": "通用",
+    "type": "复制",
+    "icon": "X",
+    "text": "不消耗能量。复制前一张牌的效果。"
+  },
+  "wildcard_thermobaric": {
+    "card_name": "温压弹万能牌",
+    "school": "温压弹",
+    "type": "万能",
+    "icon": "X",
+    "text": "不消耗能量。"
+  },
+  "wildcard_dry_ice": {
+    "card_name": "干冰弹万能牌",
+    "school": "干冰弹",
+    "type": "万能",
+    "icon": "X",
+    "text": "不消耗能量。"
+  },
+  "wildcard_electro_pierce": {
+    "card_name": "电磁穿刺万能牌",
+    "school": "电磁穿刺",
+    "type": "万能",
+    "icon": "X",
+    "text": "不消耗能量。"
+  },
+  "general_draw_supply": {
+    "card_name": "战术补给",
+    "school": "通用",
+    "type": "过牌",
+    "icon": "抽",
+    "text": "从牌库抽3张牌",
+    "cost": 1
+  }
+}

@@ -1,5 +1,500 @@
 {
   "concept_id": "starter-template",
-  "status": "empty_starter",
-  "assets": []
+  "status": "ui_card_template_light_v2",
+  "assets": [
+    {
+      "id": "card_frame_v1",
+      "source": "ai_generated",
+      "prompt_provider": "gpt-image-2",
+      "prompt_file": "docs/project/art/prompts/card_frame_v1.md",
+      "source_reference": "策划文档/04_UI设计/01_战斗UI参图/卡牌样式参考.jpg",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed5c0-3468-7b01-9398-03d977f3e984/ig_036cbdc594421c03016a32a5fcb1c48198a2dbf75c7d190bbd.png",
+      "runtime_path": "assets/ui/cards/card_frame_v1.png",
+      "godot_load_path": "res://assets/ui/cards/card_frame_v1.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/ui/Hud.gd; src/ui/HudCardWidgets.gd; src/ui/HudPileOverlay.gd; src/ui/HudAcquireCardFx.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "Light apocalypse card skin confirmed by user. Dynamic fields are cost, name, school icon/card image, and effect text. Name text aligns vertically to the cost badge centerline; effect text belongs below the horizontal divider and must not overlap the image slot.",
+      "status": "confirmed_runtime_card_template_light_v2",
+      "slot_spec": {
+        "source_size": [
+          900,
+          1600
+        ],
+        "runtime_base_size": [
+          150.0,
+          266.667
+        ],
+        "cost_box": [
+          47,
+          46,
+          193,
+          192
+        ],
+        "title_box": [
+          190,
+          36,
+          852,
+          166
+        ],
+        "shared_title_cost_center_y": 119,
+        "icon_center": [
+          450,
+          540
+        ],
+        "icon_size": [
+          560,
+          560
+        ],
+        "effect_box": [
+          52,
+          930,
+          848,
+          1465
+        ],
+        "effect_inner_box": [
+          94,
+          968,
+          806,
+          1427
+        ]
+      }
+    },
+    {
+      "id": "card_art_fallback_v1",
+      "source": "hand_drawn",
+      "prompt_provider": "local_pil_from_user_reference",
+      "runtime_path": "assets/ui/cards/card_art_fallback_v1.png",
+      "godot_load_path": "res://assets/ui/cards/card_art_fallback_v1.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/ui/Hud.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "Fallback image slot texture derived from the card UI skin/reference. Used only when a card config provides image_path but the referenced resource is missing."
+    },
+    {
+      "id": "limit_lock",
+      "source": "ai_generated",
+      "prompt_provider": "gpt-image-2",
+      "prompt_file": "docs/project/art/prompts/limit_lock.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ecfe1-55db-7b41-8fcc-6c7dff325126/ig_0104e6d19aa9f0de016a312d341628819183beb672c493d472.png",
+      "runtime_path": "assets/ui/icons/limit_lock.png",
+      "godot_load_path": "res://assets/ui/icons/limit_lock.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/ui/Hud.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "Transparent 128x128 runtime icon. Displayed once per locked ultimate limit segment when energy_max is below the full segment count."
+    },
+    {
+      "id": "school_icon_thermobaric",
+      "source": "third_party",
+      "prompt_provider": "user_provided",
+      "runtime_path": "assets/ui/icons_Skill/icon_keji_wenyadan.png",
+      "godot_load_path": "res://assets/ui/icons_Skill/icon_keji_wenyadan.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/ui/HudCardWidgets.gd; src/game/AssetRegistry.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "温压弹流派图标，用作 school=温压弹 的默认卡牌图片。"
+    },
+    {
+      "id": "school_icon_electro_pierce",
+      "source": "third_party",
+      "prompt_provider": "user_provided",
+      "runtime_path": "assets/ui/icons_Skill/icon_keji_diancichuanci.png",
+      "godot_load_path": "res://assets/ui/icons_Skill/icon_keji_diancichuanci.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/ui/HudCardWidgets.gd; src/game/AssetRegistry.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "电磁穿刺流派图标，用作 school=电磁穿刺 的默认卡牌图片。"
+    },
+    {
+      "id": "school_icon_dry_ice",
+      "source": "third_party",
+      "prompt_provider": "user_provided",
+      "runtime_path": "assets/ui/icons_Skill/icon_keji_ganbingdan.png",
+      "godot_load_path": "res://assets/ui/icons_Skill/icon_keji_ganbingdan.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/ui/HudCardWidgets.gd; src/game/AssetRegistry.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "干冰弹流派图标，用作 school=干冰弹 的默认卡牌图片。"
+    },
+    {
+      "id": "school_icon_gun",
+      "source": "third_party",
+      "prompt_provider": "user_provided",
+      "runtime_path": "assets/ui/icons_Skill/icon_keji_qiang.png",
+      "godot_load_path": "res://assets/ui/icons_Skill/icon_keji_qiang.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/ui/HudCardWidgets.gd; src/game/AssetRegistry.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "枪械流派图标，用作 school=枪械 的默认卡牌图片。"
+    },
+    {
+      "id": "school_icon_common",
+      "source": "hand_drawn",
+      "prompt_provider": "local_pil_after_aistudio_timeout",
+      "prompt_file": "docs/project/art/prompts/school_icon_common.md",
+      "source_generated_path": "assets/ui/icons_Skill/icon_keji_tongyong_source_magenta.png",
+      "runtime_path": "assets/ui/icons_Skill/icon_keji_tongyong.png",
+      "godot_load_path": "res://assets/ui/icons_Skill/icon_keji_tongyong.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/ui/HudCardWidgets.gd; src/game/AssetRegistry.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "notes": "通用流派图标，按现有 116x116 科技技能图标风格本地生成；保留纯洋红底源图方便重新抠图，运行时使用透明 PNG。"
+    },
+    {
+      "id": "defense_wall_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/defense_wall_v1.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-dcbb5766-4282-4518-ba11-295155d7e36d.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed690-453b-7740-919e-fbe178256008/ig_0661debb01727bea016a32d70ab6748199a8187560ac55a17e.png",
+      "source_chroma_path": "assets/generated/runtime/defense_wall_v1/defense_wall_v1_source_magenta.png",
+      "alpha_full_path": "assets/generated/runtime/defense_wall_v1/defense_wall_v1_alpha_full.png",
+      "runtime_path": "assets/sprites/environment/defense_wall_v1.png",
+      "godot_load_path": "res://assets/sprites/environment/defense_wall_v1.png",
+      "transparent_background": true,
+      "runtime_bound": false,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "superseded_by_defense_wall_staging_v1",
+      "runtime_base_size": [
+        1080,
+        220
+      ],
+      "gameplay_wall_rect": [
+        0,
+        1160,
+        1080,
+        120
+      ],
+      "draw_rect": [
+        0,
+        1060,
+        1080,
+        220
+      ],
+      "notes": "Formal sci-fi city defense wall sprite generated with Codex built-in image generation from the current wall size and screenshot style. Source keeps a solid magenta chroma-key background; runtime PNG is transparent and drawn with the bottom aligned to the existing wall bottom so protrusions do not change the gameplay wall range. Superseded after remeasurement because the wall and staging area must be generated as one unified visual asset.",
+      "superseded_by": "defense_wall_staging_v1"
+    },
+    {
+      "id": "defense_wall_staging_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/defense_wall_staging_v1.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-dcbb5766-4282-4518-ba11-295155d7e36d.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed690-453b-7740-919e-fbe178256008/ig_0661debb01727bea016a32d8144fc0819982a80768f78ee6a3.png",
+      "source_chroma_path": "assets/generated/runtime/defense_wall_staging_v1/defense_wall_staging_v1_source_magenta.png",
+      "alpha_full_path": "assets/generated/runtime/defense_wall_staging_v1/defense_wall_staging_v1_alpha_full.png",
+      "runtime_path": "assets/sprites/environment/defense_wall_staging_v1.png",
+      "godot_load_path": "res://assets/sprites/environment/defense_wall_staging_v1.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd; src/ui/DefenseWallPanelArt.gd; src/ui/StagingPanelArt.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "runtime_base_size": [
+        1080,
+        460
+      ],
+      "gameplay_wall_rect": [
+        0,
+        1160,
+        1080,
+        120
+      ],
+      "draw_rect": [
+        0,
+        1060,
+        1080,
+        460
+      ],
+      "local_layout": {
+        "top_protrusions_y": [
+          0,
+          100
+        ],
+        "gameplay_wall_band_y": [
+          100,
+          220
+        ],
+        "staging_area_y": [
+          220,
+          460
+        ]
+      },
+      "notes": "Formal integrated sci-fi defense base sprite generated with Codex built-in image generation after remeasuring the current wall, HP gap, and staging area. Source keeps a solid magenta chroma-key background; runtime PNG is transparent. World layer draws it from y=1060 to y=1520, and HUD wall/staging panels draw matching source regions from the same texture so material, perspective, and lighting stay unified. Gameplay wall range remains x=0,y=1160,w=1080,h=120."
+    },
+    {
+      "id": "battlefield_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/battlefield_v1.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-dcbb5766-4282-4518-ba11-295155d7e36d.png; assets/sprites/environment/defense_wall_staging_v1.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed690-453b-7740-919e-fbe178256008/ig_0661debb01727bea016a32dac883b08199a985f1370be1a773.png",
+      "source_chroma_path": "assets/generated/runtime/battlefield_v1/battlefield_v1_source_magenta.png",
+      "alpha_full_path": "assets/generated/runtime/battlefield_v1/battlefield_v1_alpha_full.png",
+      "runtime_path": "assets/sprites/environment/battlefield_v1.png",
+      "godot_load_path": "res://assets/sprites/environment/battlefield_v1.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "pending_runtime_check",
+      "runtime_base_size": [
+        1080,
+        1030
+      ],
+      "draw_rect": [
+        0,
+        130,
+        1080,
+        1030
+      ],
+      "lane_spec": {
+        "left_side_band_width": 176,
+        "center_lane_width": 728,
+        "right_side_band_width": 176
+      },
+      "notes": "Formal sci-fi city battlefield ground sprite generated with Codex built-in image generation. It replaces the previous procedural field/center lane/side bands while keeping entities, projectiles, combat areas, defense wall, staging area, and HUD drawn separately. Source keeps a solid magenta chroma-key background; runtime PNG is transparent and drawn at world x=0,y=130,w=1080,h=1030."
+    },
+    {
+      "id": "player_hero_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/player_hero_v1.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-4e831801-e7f5-434c-ba55-404c804656f2.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed690-453b-7740-919e-fbe178256008/ig_08784e11cd914ffc016a32dff295f8819b8e21b5acb1feb63d.png",
+      "source_chroma_path": "assets/generated/runtime/player_hero_v1/player_hero_v1_source_magenta.png",
+      "alpha_full_path": "assets/generated/runtime/player_hero_v1/player_hero_v1_alpha_full.png",
+      "runtime_path": "assets/sprites/characters/player_hero_v1.png",
+      "godot_load_path": "res://assets/sprites/characters/player_hero_v1.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; src/ui/SmallHeroIcon.gd",
+      "screenshot_visible": "reports/screenshots/20260618-020815-native/input-after.png",
+      "runtime_source_size": [
+        480,
+        1140
+      ],
+      "hud_local_draw_rect": [
+        16,
+        -72,
+        88,
+        209
+      ],
+      "notes": "Formal player hero sprite generated with Codex built-in image generation after user correction. Final version is a young adult black-and-white twin-tail heroine viewed from above/behind, aiming a compact handgun upward toward the battlefield. Source keeps a solid magenta chroma-key background; runtime PNG is transparent and replaces the old procedural player body while preserving a procedural fallback if the texture is missing."
+    },
+    {
+      "id": "monster_grunt",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/monster_grunt.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-5a9745a5-6621-4062-b4fc-64548d7fef6b.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed6c8-d053-7713-af92-7d2c7946a3dd/ig_006f371dcb955119016a32e73679d4819b96f1d97704dfecf4.png",
+      "source_chroma_path": "assets/generated/runtime/monsters/source/monster_grunt-source.png",
+      "runtime_path": "assets/sprites/monsters/monster_grunt.png",
+      "godot_load_path": "res://assets/sprites/monsters/monster_grunt.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "reports/screenshots/20260618-024717-native/input-after.png",
+      "direction": "exact_down_front_facing_no_left_or_right_turn",
+      "notes": "Formal monster sprite seed generated with Codex built-in image generation from the user reference. Source keeps a solid magenta chroma-key background; runtime PNG is transparent. Final direction is exact front-facing down for enemies moving from the top of the battlefield toward the bottom. Runtime drawing now uses scenes/Game.gd monster.model mapping; fallback remains procedural if texture load fails."
+    },
+    {
+      "id": "monster_runner",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/monster_runner.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-5a9745a5-6621-4062-b4fc-64548d7fef6b.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed6c8-d053-7713-af92-7d2c7946a3dd/ig_006f371dcb955119016a32e7766858819bb3c112fdcca37327.png",
+      "source_chroma_path": "assets/generated/runtime/monsters/source/monster_runner-source.png",
+      "runtime_path": "assets/sprites/monsters/monster_runner.png",
+      "godot_load_path": "res://assets/sprites/monsters/monster_runner.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "pending_runtime_wave_capture",
+      "direction": "exact_down_front_facing_no_left_or_right_turn",
+      "notes": "Formal monster sprite seed generated with Codex built-in image generation from the user reference. Source keeps a solid magenta chroma-key background; runtime PNG is transparent. Final direction is exact front-facing down for enemies moving from the top of the battlefield toward the bottom. Runtime drawing now uses scenes/Game.gd monster.model mapping; fallback remains procedural if texture load fails."
+    },
+    {
+      "id": "monster_tank",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/monster_tank.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-5a9745a5-6621-4062-b4fc-64548d7fef6b.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed6c8-d053-7713-af92-7d2c7946a3dd/ig_006f371dcb955119016a32e7bb2314819ba762cc0ced42e7e1.png",
+      "source_chroma_path": "assets/generated/runtime/monsters/source/monster_tank-source.png",
+      "runtime_path": "assets/sprites/monsters/monster_tank.png",
+      "godot_load_path": "res://assets/sprites/monsters/monster_tank.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "pending_runtime_wave_capture",
+      "direction": "exact_down_front_facing_no_left_or_right_turn",
+      "notes": "Formal monster sprite seed generated with Codex built-in image generation from the user reference. Source keeps a solid magenta chroma-key background; runtime PNG is transparent. Final direction is exact front-facing down for enemies moving from the top of the battlefield toward the bottom. Runtime drawing now uses scenes/Game.gd monster.model mapping; fallback remains procedural if texture load fails."
+    },
+    {
+      "id": "monster_elite",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/monster_elite.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-5a9745a5-6621-4062-b4fc-64548d7fef6b.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed6c8-d053-7713-af92-7d2c7946a3dd/ig_006f371dcb955119016a32e80a3008819b82b5563880dc31b6.png",
+      "source_chroma_path": "assets/generated/runtime/monsters/source/monster_elite-source.png",
+      "runtime_path": "assets/sprites/monsters/monster_elite.png",
+      "godot_load_path": "res://assets/sprites/monsters/monster_elite.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "pending_runtime_wave_capture",
+      "direction": "exact_down_front_facing_no_left_or_right_turn",
+      "notes": "Formal monster sprite seed generated with Codex built-in image generation from the user reference. Source keeps a solid magenta chroma-key background; runtime PNG is transparent. Final direction is exact front-facing down for enemies moving from the top of the battlefield toward the bottom. Runtime drawing now uses scenes/Game.gd monster.model mapping; fallback remains procedural if texture load fails."
+    },
+    {
+      "id": "monster_boss_cathedral",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/monster_boss_cathedral.md",
+      "source_reference": "C:/Users/Arche/AppData/Local/Temp/codex-clipboard-5a9745a5-6621-4062-b4fc-64548d7fef6b.png",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed6c8-d053-7713-af92-7d2c7946a3dd/ig_006f371dcb955119016a32e84d27f8819b8a89660a9184b3a5.png",
+      "source_chroma_path": "assets/generated/runtime/monsters/source/monster_boss_cathedral-source.png",
+      "runtime_path": "assets/sprites/monsters/monster_boss_cathedral.png",
+      "godot_load_path": "res://assets/sprites/monsters/monster_boss_cathedral.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd",
+      "screenshot_visible": "pending_runtime_wave_capture",
+      "direction": "exact_down_front_facing_no_left_or_right_turn",
+      "notes": "Formal monster sprite seed generated with Codex built-in image generation from the user reference. Source keeps a solid magenta chroma-key background; runtime PNG is transparent. Final direction is exact front-facing down for enemies moving from the top of the battlefield toward the bottom. Runtime drawing now uses scenes/Game.gd monster.model mapping; fallback remains procedural if texture load fails."
+    },
+    {
+      "id": "draw_pile_icon_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/ui_hud_v1.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed7f7-e7a0-74e3-a7de-ee703830a43e/ig_0cbb1033840b4f3a016a33321a6978819b87eebc9fb294a996.png",
+      "source_chroma_path": "assets/generated/runtime/ui_hud_v1/ui_hud_v1_source_magenta.png",
+      "runtime_path": "assets/ui/hud/draw_pile_icon_v1.png",
+      "godot_load_path": "res://assets/ui/hud/draw_pile_icon_v1.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; src/ui/HudLayoutControlStyleApplier.gd; src/ui/HudPileOverlayController.gd",
+      "screenshot_visible": "reports/screenshots/20260618-075847-native/input-after.png",
+      "source_crop_box": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "notes": "draw pile official HUD icon; generated as part of one cohesive HUD atlas on a solid magenta chroma-key background and postprocessed into transparent runtime PNG."
+    },
+    {
+      "id": "discard_pile_icon_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/ui_hud_v1.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed7f7-e7a0-74e3-a7de-ee703830a43e/ig_0cbb1033840b4f3a016a33321a6978819b87eebc9fb294a996.png",
+      "source_chroma_path": "assets/generated/runtime/ui_hud_v1/ui_hud_v1_source_magenta.png",
+      "runtime_path": "assets/ui/hud/discard_pile_icon_v1.png",
+      "godot_load_path": "res://assets/ui/hud/discard_pile_icon_v1.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; src/ui/HudLayoutControlStyleApplier.gd; src/ui/HudPileOverlayController.gd",
+      "screenshot_visible": "reports/screenshots/20260618-075847-native/input-after.png",
+      "source_crop_box": [
+        1,
+        0,
+        1,
+        1
+      ],
+      "notes": "discard pile official HUD icon; generated as part of one cohesive HUD atlas on a solid magenta chroma-key background and postprocessed into transparent runtime PNG."
+    },
+    {
+      "id": "discard_hand_icon_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/ui_hud_v1.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed7f7-e7a0-74e3-a7de-ee703830a43e/ig_0cbb1033840b4f3a016a33321a6978819b87eebc9fb294a996.png",
+      "source_chroma_path": "assets/generated/runtime/ui_hud_v1/ui_hud_v1_source_magenta.png",
+      "runtime_path": "assets/ui/hud/discard_hand_icon_v1.png",
+      "godot_load_path": "res://assets/ui/hud/discard_hand_icon_v1.png",
+      "transparent_background": true,
+      "runtime_bound": false,
+      "bound_by": "src/game/AssetRegistry.gd; src/ui/HudLayoutControlStyleApplier.gd",
+      "screenshot_visible": "reverted_to_text_discard_button",
+      "source_crop_box": [
+        2,
+        0,
+        1,
+        1
+      ],
+      "notes": "discard hand official button icon; generated as part of one cohesive HUD atlas on a solid magenta chroma-key background and postprocessed into transparent runtime PNG. Reverted to text discard button on 2026-06-18 because the icon was not semantically readable; asset kept only for history."
+    },
+    {
+      "id": "pause_icon_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/ui_hud_v1.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed7f7-e7a0-74e3-a7de-ee703830a43e/ig_0cbb1033840b4f3a016a33321a6978819b87eebc9fb294a996.png",
+      "source_chroma_path": "assets/generated/runtime/ui_hud_v1/ui_hud_v1_source_magenta.png",
+      "runtime_path": "assets/ui/hud/pause_icon_v1.png",
+      "godot_load_path": "res://assets/ui/hud/pause_icon_v1.png",
+      "transparent_background": true,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; src/ui/HudLayoutControlStyleApplier.gd",
+      "screenshot_visible": "reports/screenshots/20260618-075847-native/input-after.png",
+      "source_crop_box": [
+        3,
+        0,
+        1,
+        1
+      ],
+      "notes": "pause official button icon; generated as part of one cohesive HUD atlas on a solid magenta chroma-key background and postprocessed into transparent runtime PNG."
+    },
+    {
+      "id": "ui_background_v1",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/ui_background_v1.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed856-f9b0-7852-b036-af7cee008f9c/ig_0f2777c415c1d31e016a334a23ef7c819ba67004d99658de23.png",
+      "runtime_path": "assets/generated/runtime/ui_background_v1/ui_background_v1_candidate.png",
+      "godot_load_path": "res://assets/generated/runtime/ui_background_v1/ui_background_v1_candidate.png",
+      "transparent_background": false,
+      "runtime_bound": false,
+      "bound_by": "none; rejected asset not registered at runtime",
+      "screenshot_visible": "invalid_candidate_preview_only",
+      "runtime_size": [
+        1080,
+        1920
+      ],
+      "notes": "Rejected after user review: source image resembled a battlefield/runtime preview instead of a standalone interface backdrop. Kept only as failed attempt record.",
+      "status": "rejected_candidate"
+    },
+    {
+      "id": "ui_background_v2",
+      "source": "ai_generated",
+      "prompt_provider": "codex_builtin_image_gen",
+      "prompt_file": "docs/project/art/prompts/ui_background_v2.md",
+      "source_generated_path": "C:/Users/Arche/.codex/generated_images/019ed856-f9b0-7852-b036-af7cee008f9c/ig_0f2777c415c1d31e016a334d6ecdac819bb1b87876376ed79e.png",
+      "runtime_path": "assets/generated/runtime/ui_background_v2/ui_background_v2_candidate.png",
+      "godot_load_path": "res://assets/generated/runtime/ui_background_v2/ui_background_v2_candidate.png",
+      "transparent_background": false,
+      "runtime_bound": true,
+      "bound_by": "src/game/AssetRegistry.gd; scenes/Game.gd; src/game/GameBattlefieldDrawer.gd; src/ui/HudLayoutPanelStyleGroups.gd",
+      "screenshot_visible": "reports/screenshots/20260618-101103-native/input-after.png",
+      "runtime_size": [
+        1080,
+        1920
+      ],
+      "notes": "Standalone dark sci-fi interface backdrop. Generated as a real background resource first, then composited into the user screenshot for preview. User approved integration; runtime now draws this full-screen behind the battlefield and HUD hand area uses a lower-opacity glass panel so the background remains visible.",
+      "status": "runtime_bound_verified"
+    }
+  ]
 }

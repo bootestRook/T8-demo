@@ -1,0 +1,120 @@
+[
+  {
+    "id": "card_new_thermobaric",
+    "kind": "new_card",
+    "title": "获得热能爆炸",
+    "card_id": "thermal_explosion",
+    "school": "温压弹",
+    "description": "加入牌库\n温压弹爆炸伤害+80%"
+  },
+  {
+    "id": "card_new_dry_ice",
+    "kind": "new_card",
+    "title": "获得低温贯穿",
+    "card_id": "low_temperature_pierce",
+    "school": "干冰弹",
+    "description": "加入牌库\n伤害+30%，穿透+2"
+  },
+  {
+    "id": "card_new_electro",
+    "kind": "new_card",
+    "title": "获得电磁爆炸",
+    "card_id": "electro_explosion",
+    "school": "电磁穿刺",
+    "description": "加入牌库\n命中时附带小范围爆炸"
+  },
+  {
+    "id": "gun_bullet_damage",
+    "kind": "gun_upgrade",
+    "title": "子弹增伤",
+    "school": "枪械",
+    "description": "自动射击伤害+60%",
+    "field": "bullet_damage_mul",
+    "add": 0.6
+  },
+  {
+    "id": "gun_fire_rate",
+    "kind": "gun_upgrade",
+    "title": "射速提升",
+    "school": "枪械",
+    "description": "射击间隔×0.9",
+    "field": "fire_interval",
+    "mul": 0.9
+  },
+  {
+    "id": "gun_burst",
+    "kind": "gun_upgrade",
+    "title": "连发射击",
+    "school": "枪械",
+    "description": "每轮多发1弹\n单弹伤害×0.8",
+    "field": "burst_count",
+    "add": 1,
+    "damage_mul": 0.8
+  },
+  {
+    "id": "survival_wall_hp",
+    "kind": "survival",
+    "title": "城墙加固",
+    "school": "防线",
+    "description": "最大生命+10%\n补足新增生命",
+    "field": "wall_hp_max",
+    "mul": 1.1
+  },
+  {
+    "id": "survival_wall_repair",
+    "kind": "survival",
+    "title": "紧急维修",
+    "school": "防线",
+    "description": "立即回复20%\n城墙最大生命",
+    "field": "wall_repair_ratio",
+    "value": 0.2
+  },
+  {
+    "id": "energy_regen",
+    "kind": "energy",
+    "title": "能量回路",
+    "school": "能量",
+    "description": "能量回复速度+15%",
+    "field": "energy_regen_per_sec",
+    "mul": 1.15
+  },
+  {
+    "id": "refill_speed",
+    "kind": "energy",
+    "title": "快速补给",
+    "school": "能量",
+    "description": "补牌间隔×0.85",
+    "field": "refill_interval",
+    "mul": 0.85
+  },
+  {
+    "id": "core_thermobaric_count",
+    "kind": "core_skill",
+    "title": "温压弹数量 +1",
+    "school": "温压弹",
+    "description": "释放时额外生成\n1枚温压弹",
+    "core_skill": "thermobaric",
+    "field": "projectile_count",
+    "add": 1
+  },
+  {
+    "id": "core_dry_ice_count",
+    "kind": "core_skill",
+    "title": "干冰弹数量 +1",
+    "school": "干冰弹",
+    "description": "释放时额外生成\n1枚干冰弹",
+    "core_skill": "dry_ice",
+    "field": "projectile_count",
+    "add": 1
+  },
+  {
+    "id": "core_electro_count",
+    "kind": "core_skill",
+    "title": "电磁穿刺数量 +1",
+    "school": "电磁穿刺",
+    "description": "释放时额外生成\n1道电磁穿刺",
+    "core_skill": "electro_pierce",
+    "field": "projectile_count",
+    "add": 1
+  }
+]

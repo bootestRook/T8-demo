@@ -1,7 +1,19 @@
 extends PanelContainer
 
+const STAGING_ART_SOURCE_RECT := Rect2(Vector2(0.0, 220.0), Vector2(1080.0, 240.0))
+
+var _wall_staging_texture: Texture2D = null
+
+
+func _ready() -> void:
+	_wall_staging_texture = AssetRegistry.load_texture(&"sprite", &"defense_wall_staging_v1")
+	queue_redraw()
+
 
 func _draw() -> void:
+	if _wall_staging_texture != null:
+		draw_texture_rect_region(_wall_staging_texture, Rect2(Vector2.ZERO, size), STAGING_ART_SOURCE_RECT)
+		return
 	var w := size.x
 	var h := size.y
 	draw_rect(Rect2(Vector2.ZERO, size), Color(0.28, 0.27, 0.24, 0.96), true)

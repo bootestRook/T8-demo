@@ -4,6 +4,7 @@ const MAIN_SCENE := "res://scenes/Game.tscn"
 
 var _output_dir := ""
 var _frames_between_shots := 18
+var _click_position := Vector2(400.0, 300.0)
 
 
 func _ready() -> void:
@@ -11,6 +12,10 @@ func _ready() -> void:
 	var scene_path := _arg_value("--scene", MAIN_SCENE)
 	var frames_text := _arg_value("--frames-between-shots", str(_frames_between_shots))
 	_frames_between_shots = max(1, frames_text.to_int())
+	_click_position = Vector2(
+		_arg_value("--click-x", "400").to_int(),
+		_arg_value("--click-y", "300").to_int()
+	)
 
 	if _output_dir.is_empty():
 		print("RuntimeScreenshotRunner loaded without --screenshot-dir; dry-load only.")
@@ -34,8 +39,8 @@ func _run_capture_sequence() -> void:
 	_save_viewport("ready")
 
 	var viewport := get_viewport()
-	viewport.push_input(_mouse_click_event(Vector2(400.0, 300.0), true))
-	viewport.push_input(_mouse_click_event(Vector2(400.0, 300.0), false))
+	viewport.push_input(_mouse_click_event(_click_position, true))
+	viewport.push_input(_mouse_click_event(_click_position, false))
 	await _wait_frames(_frames_between_shots)
 	_save_viewport("running")
 

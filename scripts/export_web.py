@@ -8,7 +8,6 @@ Web 导出脚本 — godot-v1 模板
 """
 import argparse
 import json
-import os
 import shutil
 import subprocess
 import sys
@@ -20,68 +19,8 @@ EXPORT_PRESETS = PROJECT_ROOT / "export_presets.cfg"
 GODOT_ENV_KEY = "GODOT4_PATH"
 GODOT_IGNORE_DIRS = ("exports", "reports", ".runtime", "tools", "html5")
 
-
-def _sort_godot_exec_paths(paths: list[Path]) -> list[str]:
-    dedup: list[str] = []
-    seen: set[str] = set()
-    for path in paths:
-        if not path.is_file():
-            continue
-        text = str(path)
-        key = text.lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        dedup.append(text)
-    return sorted(
-        dedup,
-        key=lambda value: (
-            0 if "console" in Path(value).name.lower() else 1,
-            Path(value).name.lower(),
-            value.lower(),
-        ),
-    )
-
-
-def find_godot(hint: str = "") -> str | None:
-    candidates = []
-    if hint:
-        candidates.append(hint)
-    env = os.environ.get(GODOT_ENV_KEY)
-    if env:
-        candidates.append(env)
-    for root in [PROJECT_ROOT / "tools" / "godot", PROJECT_ROOT / "tools"]:
-        if root.exists():
-            candidates += _sort_godot_exec_paths([
-                *root.rglob("Godot*.exe"),
-                *root.rglob("godot*.exe"),
-            ])
-    candidates += ["godot4", "godot"]
-    if sys.platform == "win32":
-        import glob
-        for pat in [
-            r"C:\Program Files\Godot\Godot_v4*_stable_win64_console.exe",
-            r"C:\Program Files (x86)\Godot\Godot_v4*_stable_win64_console.exe",
-            r"C:\Program Files\Godot\Godot_v4*_stable_win64.exe",
-            r"C:\Program Files (x86)\Godot\Godot_v4*_stable_win64.exe",
-        ]:
-            candidates += glob.glob(pat)
-    elif sys.platform == "darwin":
-        candidates += [
-            "/Applications/Godot.app/Contents/MacOS/Godot",
-            "/Applications/Godot_4.app/Contents/MacOS/Godot",
-        ]
-    else:
-        candidates += [
-            str(Path.home() / ".local/bin/godot4"),
-            str(Path.home() / ".local/bin/godot"),
-        ]
-
-    for c in candidates:
-        resolved = shutil.which(c) or (Path(c).is_file() and c)
-        if resolved:
-            return str(resolved)
-    return None
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from godot_locator import find_godot  # noqa: E402
 
 
 def ensure_godot_ignored_process_dirs() -> None:

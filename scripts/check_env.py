@@ -36,6 +36,9 @@ REQUIRE_GODOT_MCP = "--require-godot-mcp" in sys.argv or (
     os.environ.get(GODOT_MCP_REQUIRED_ENV_KEY, "").strip().lower() in {"1", "true", "yes", "on"}
 )
 
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from godot_locator import find_godot as locate_godot, godot_version  # noqa: E402
+
 
 def out(level: str, message: str) -> None:
     if not JSON_OUTPUT:
@@ -72,67 +75,12 @@ def _sort_godot_exec_paths(paths: list[Path]) -> list[str]:
 
 
 def find_godot() -> tuple[str | None, str | None]:
-    candidates = []
-
-    env_path = os.environ.get("GODOT4_PATH")
-    if env_path:
-        candidates.append(env_path)
-
-    godot_dir = PROJECT_ROOT / "tools" / "godot"
-    if godot_dir.exists():
-        candidates += _sort_godot_exec_paths([
-            *godot_dir.rglob("Godot*.exe"),
-            *godot_dir.rglob("godot*.exe"),
-        ])
-
-    tools_dir = PROJECT_ROOT / "tools"
-    if tools_dir.exists():
-        candidates += _sort_godot_exec_paths([
-            *tools_dir.glob("Godot*.exe"),
-            *tools_dir.glob("godot*.exe"),
-        ])
-
-    candidates += ["godot4", "godot"]
-
-    if sys.platform == "win32":
-        import glob
-        for pattern in [
-            r"C:\Program Files\Godot\Godot_v4*_stable_win64_console.exe",
-            r"C:\Program Files (x86)\Godot\Godot_v4*_stable_win64_console.exe",
-            r"C:\Program Files\Godot\Godot_v4*_stable_win64.exe",
-            r"C:\Program Files (x86)\Godot\Godot_v4*_stable_win64.exe",
-        ]:
-            candidates += glob.glob(pattern)
-    elif sys.platform == "darwin":
-        candidates += [
-            "/Applications/Godot.app/Contents/MacOS/Godot",
-            "/Applications/Godot_4.app/Contents/MacOS/Godot",
-        ]
-    else:
-        candidates += [
-            str(Path.home() / ".local/bin/godot4"),
-            str(Path.home() / ".local/bin/godot"),
-            "/usr/local/bin/godot4",
-            "/usr/local/bin/godot",
-        ]
-
-    for candidate in candidates:
-        resolved = shutil.which(candidate) or (Path(candidate).is_file() and candidate)
-        if not resolved:
-            continue
-        if FAST_MODE:
-            return str(resolved), _infer_godot_version_from_path(str(resolved))
-        try:
-            result = subprocess.run(
-                [resolved, "--version"],
-                capture_output=True, text=True, timeout=5,
-            )
-            version_str = (result.stdout or result.stderr or "").strip().splitlines()[0]
-            return resolved, version_str
-        except Exception:
-            continue
-
-    return None, None
+    resolved = locate_godot()
+    if not resolved:
+        return None, None
+    if FAST_MODE:
+        return resolved, _infer_godot_version_from_path(resolved)
+    return resolved, godot_version(resolved)
 
 
 def find_git() -> tuple[str | None, str | None]:

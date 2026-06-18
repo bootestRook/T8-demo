@@ -23,6 +23,9 @@ ALT_XULEK_ROOT = PROJECT_ROOT / "tools" / "godot-mcp"
 GODOT_WS_URL = "ws://127.0.0.1:49631"
 CODING_SOLO_PACKAGE = "@coding-solo/godot-mcp@0.1.1"
 
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from godot_locator import find_godot  # noqa: E402
+
 
 def _as_posix(path: Path) -> str:
     return path.resolve().as_posix()
@@ -83,30 +86,8 @@ def _sort_godot_exec_paths(paths: list[Path]) -> list[Path]:
 
 
 def _find_godot() -> str | None:
-    env_path = os.environ.get("GODOT4_PATH")
-    if env_path:
-        return env_path
-
-    candidates: list[Path] = []
-    godot_dir = PROJECT_ROOT / "tools" / "godot"
-    if godot_dir.exists():
-        candidates += _sort_godot_exec_paths([
-            *godot_dir.rglob("Godot*.exe"),
-            *godot_dir.rglob("godot*.exe"),
-        ])
-
-    tools_dir = PROJECT_ROOT / "tools"
-    if tools_dir.exists():
-        candidates += _sort_godot_exec_paths([
-            *tools_dir.glob("Godot*.exe"),
-            *tools_dir.glob("godot*.exe"),
-        ])
-
-    for path in candidates:
-        if path.is_file():
-            return _as_posix(path)
-
-    return _find_command(["godot4", "godot"])
+    godot = find_godot()
+    return godot.replace("\\", "/") if godot else None
 
 
 def _godot_mcp_roots() -> list[Path]:

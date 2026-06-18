@@ -36,10 +36,13 @@ VFX="*res://addons/vfx_library/vfx.gd"
 
 window/size/viewport_width=1080
 window/size/viewport_height=1920
-window/size/window_width_override=540
-window/size/window_height_override=960
-window/stretch/mode="viewport"
-window/stretch/aspect="keep"
+window/size/window_width_override=1080
+window/size/window_height_override=1920
+window/stretch/mode="canvas_items"
+
+[dotnet]
+
+project/assembly_name="Godot V1 Plus"
 
 [rendering]
 

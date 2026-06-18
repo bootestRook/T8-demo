@@ -1,0 +1,125 @@
+{
+  "thermobaric_probe": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "thermobaric_pressure_calibration": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "thermobaric_barrage": [
+    {"text": "1枚", "base_value": 1, "format": "count", "unit": "枚"}
+  ],
+  "thermal_explosion": [
+    {"text": "+80%", "base_value": 80, "format": "signed_percent"}
+  ],
+  "thermobaric_impact": [
+    {"text": "+80%", "base_value": 80, "format": "signed_percent"},
+    {"text": "+75%", "base_value": 75, "format": "signed_percent"}
+  ],
+  "thermal_burst": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "thermal_ignite": [
+    {"text": "2秒", "base_value": 2, "format": "seconds"}
+  ],
+  "rich_fuel_fill": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "explosion_sparks": [
+    {"text": "1个", "base_value": 1, "format": "count", "unit": "个"}
+  ],
+  "dry_ice_probe": [
+    {"text": "+15%", "base_value": 15, "format": "signed_percent"}
+  ],
+  "condensation_calibration": [
+    {"text": "+1", "base_value": 1, "format": "signed_number"}
+  ],
+  "scatter_small_ice": [
+    {"text": "3个", "base_value": 3, "format": "count", "unit": "个"}
+  ],
+  "low_temperature_pierce": [
+    {"text": "+30%", "base_value": 30, "format": "signed_percent"},
+    {"text": "+2", "base_value": 2, "format": "signed_number"}
+  ],
+  "condensed_heavy_ice": [
+    {"text": "+50%", "base_value": 50, "format": "signed_percent"},
+    {"text": "+1", "base_value": 1, "format": "signed_number"}
+  ],
+  "dry_ice_damage_boost": [
+    {"text": "+60%", "base_value": 60, "format": "signed_percent"}
+  ],
+  "flash_freeze_ice": [
+    {"text": "+30%", "base_value": 30, "format": "signed_percent"},
+    {"text": "2秒", "base_value": 2, "format": "seconds"}
+  ],
+  "dry_ice_barrage": [
+    {"text": "1枚", "base_value": 1, "format": "count", "unit": "枚"}
+  ],
+  "frostbite_invasion": [
+    {"text": "10秒", "base_value": 10, "format": "seconds"},
+    {"text": "5次", "base_value": 5, "format": "count", "unit": "次"}
+  ],
+  "dry_ice_volley": [
+    {"text": "+1", "base_value": 1, "format": "signed_number"}
+  ],
+  "heavy_ice_pierce": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"},
+    {"text": "+2", "base_value": 2, "format": "signed_number"}
+  ],
+  "capacitor_test": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "magnetic_pole_calibration": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "electro_explosion_damage": [
+    {"text": "+80%", "base_value": 80, "format": "signed_percent"}
+  ],
+  "electro_explosion_expand": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent"}
+  ],
+  "electro_matrix": [
+    {"text": "1秒", "base_value": 1, "format": "seconds"}
+  ],
+  "electro_diversion": [
+    {"text": "1次", "base_value": 1, "format": "count", "unit": "次"}
+  ],
+  "paralyze_damage": [
+    {"text": "+30%", "base_value": 30, "format": "signed_percent"},
+    {"text": "+1.5秒", "base_value": 1.5, "format": "signed_seconds", "decimals": 1}
+  ],
+  "electro_fission": [
+    {"text": "2个", "base_value": 2, "format": "count", "unit": "个"}
+  ],
+  "electro_diversion_plus": [
+    {"text": "1次", "base_value": 1, "format": "count", "unit": "次"}
+  ],
+  "starter_steady_aim": [
+    {"text": "+20%", "base_value": 20, "format": "signed_percent", "runtime_field": "damage_mul", "runtime_kind": "multiplier_bonus"}
+  ],
+  "starter_infinite_fire": [
+    {"text": "3秒", "base_value": 3, "format": "seconds", "runtime_field": "duration", "runtime_kind": "scale"}
+  ],
+  "starter_first_aid": [
+    {"text": "5%", "base_value": 5, "format": "percent", "runtime_field": "missing_hp_ratio", "runtime_kind": "scale"}
+  ],
+  "starter_tactical_reload": [
+    {"text": "50%", "base_value": 50, "format": "percent", "runtime_field": "ammo_ratio", "runtime_kind": "scale"}
+  ],
+  "starter_weakpoint_mark": [
+    {"text": "3个", "base_value": 3, "format": "count", "unit": "个", "runtime_field": "target_count", "runtime_kind": "round_scale"},
+    {"text": "50%", "base_value": 50, "format": "percent", "runtime_field": "damage_taken_mul", "runtime_kind": "multiplier_bonus"},
+    {"text": "2秒", "base_value": 2, "format": "seconds", "runtime_field": "duration", "runtime_kind": "scale"}
+  ],
+  "starter_temporary_shield": [
+    {"text": "15%", "base_value": 15, "format": "percent", "runtime_field": "wall_hp_ratio", "runtime_kind": "scale"}
+  ],
+  "starter_rest_and_ready": [
+    {"text": "+50%", "base_value": 50, "format": "signed_percent", "runtime_field": "damage_mul", "runtime_kind": "multiplier_bonus"}
+  ],
+  "starter_flash_grenade": [
+    {"text": "2秒", "base_value": 2, "format": "seconds", "runtime_field": "duration", "runtime_kind": "scale"}
+  ],
+  "starter_growth_plan": [
+    {"text": "+2%", "base_value": 2, "format": "signed_percent", "runtime_field": "damage_add_mul", "runtime_kind": "scale"}
+  ]
+}

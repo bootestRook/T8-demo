@@ -16,6 +16,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 MARKER_FILE  = PROJECT_ROOT / ".godot-export-templates-ready"
 
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from godot_locator import find_godot, godot_version  # noqa: E402
+
 
 def _sort_godot_exec_paths(paths: list[Path]) -> list[str]:
     dedup: list[str] = []
@@ -40,40 +43,16 @@ def _sort_godot_exec_paths(paths: list[Path]) -> list[str]:
 
 
 def _find_godot() -> str | None:
-    candidates = []
-    env_path = os.environ.get("GODOT4_PATH")
-    if env_path:
-        candidates.append(env_path)
-    for root in [PROJECT_ROOT / "tools" / "godot", PROJECT_ROOT / "tools"]:
-        if root.exists():
-            candidates += _sort_godot_exec_paths([
-                *root.rglob("Godot*.exe"),
-                *root.rglob("godot*.exe"),
-            ])
-    candidates += ["godot4", "godot"]
-    for candidate in candidates:
-        resolved = shutil.which(candidate) or (Path(candidate).is_file() and candidate)
-        if resolved:
-            return str(resolved)
-    return None
+    return find_godot()
 
 
 def _godot_template_version() -> str | None:
     godot = _find_godot()
     if not godot:
         return None
-    try:
-        result = subprocess.run(
-            [godot, "--version"],
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=5,
-        )
-    except Exception:
+    version = godot_version(godot)
+    if not version:
         return None
-    version = (result.stdout or result.stderr or "").strip().splitlines()[0]
     parts = version.split(".")
     if len(parts) >= 4 and parts[0].isdigit() and parts[1].isdigit():
         return ".".join(parts[:4])

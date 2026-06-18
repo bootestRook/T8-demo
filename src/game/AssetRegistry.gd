@@ -15,7 +15,28 @@ var _resource_cache: Dictionary = {}
 
 
 func _ready() -> void:
-	pass
+	register_image(&"ui_background_v2", "res://assets/generated/runtime/ui_background_v2/ui_background_v2_candidate.png")
+	register_ui(&"card_frame_v1", UI_DIR + "/cards/card_frame_v1.png")
+	register_ui(&"card_art_fallback_v1", UI_DIR + "/cards/card_art_fallback_v1.png")
+	register_ui(&"limit_lock", UI_DIR + "/icons/limit_lock.png")
+	register_ui(&"draw_pile_icon_v1", "res://assets/ui/hud/draw_pile_icon_v1.png")
+	register_ui(&"discard_pile_icon_v1", "res://assets/ui/hud/discard_pile_icon_v1.png")
+	register_ui(&"discard_hand_icon_v1", "res://assets/ui/hud/discard_hand_icon_v1.png")
+	register_ui(&"pause_icon_v1", "res://assets/ui/hud/pause_icon_v1.png")
+	register_ui(&"school_icon_thermobaric", UI_DIR + "/icons_Skill/icon_keji_wenyadan.png")
+	register_ui(&"school_icon_electro_pierce", UI_DIR + "/icons_Skill/icon_keji_diancichuanci.png")
+	register_ui(&"school_icon_dry_ice", UI_DIR + "/icons_Skill/icon_keji_ganbingdan.png")
+	register_ui(&"school_icon_gun", UI_DIR + "/icons_Skill/icon_keji_qiang.png")
+	register_ui(&"school_icon_common", UI_DIR + "/icons_Skill/icon_keji_tongyong.png")
+	register_sprite(&"defense_wall_v1", "res://assets/sprites/environment/defense_wall_v1.png")
+	register_sprite(&"defense_wall_staging_v1", "res://assets/sprites/environment/defense_wall_staging_v1.png")
+	register_sprite(&"battlefield_v1", "res://assets/sprites/environment/battlefield_v1.png")
+	register_sprite(&"player_hero_v1", "res://assets/sprites/characters/player_hero_v1.png")
+	register_sprite(&"monster_grunt", "res://assets/sprites/monsters/monster_grunt.png")
+	register_sprite(&"monster_runner", "res://assets/sprites/monsters/monster_runner.png")
+	register_sprite(&"monster_tank", "res://assets/sprites/monsters/monster_tank.png")
+	register_sprite(&"monster_elite", "res://assets/sprites/monsters/monster_elite.png")
+	register_sprite(&"monster_boss_cathedral", "res://assets/sprites/monsters/monster_boss_cathedral.png")
 
 
 func register_image(id: StringName, path: String) -> void:

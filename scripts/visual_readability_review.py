@@ -304,20 +304,27 @@ def _runtime_ui_text() -> str:
 
 
 def _check_hud_responsive_layout() -> None:
-    scene = safe_read(PROJECT_ROOT / "scenes" / "Game.tscn")
+    scene = "\n".join(
+        [
+            safe_read(PROJECT_ROOT / "scenes" / "Game.tscn"),
+            safe_read(PROJECT_ROOT / "scenes" / "ui" / "Hud.tscn"),
+        ]
+    )
     hud = safe_read(PROJECT_ROOT / "src" / "ui" / "Hud.gd")
+    ui_code = "\n".join(safe_read(path) for path in sorted((PROJECT_ROOT / "src" / "ui").glob("*.gd")))
     issues: list[str] = []
     concerns: list[str] = []
 
     fixed_wide_panel = re.search(r"custom_minimum_size\s*=\s*Vector2\((\d{3,})\s*,", scene)
     if fixed_wide_panel:
         width = int(fixed_wide_panel.group(1))
-        if width > 360 and "MESSAGE_WIDTH_RATIO" not in hud:
+        if width > 360 and "MESSAGE_WIDTH_RATIO" not in ui_code:
             issues.append(f"中心 HUD 面板存在固定最小宽度 {width}px，窄屏可能溢出。")
 
     if 'name="TopBar" type="HBoxContainer"' in scene:
         issues.append("TopBar 仍为 HBoxContainer，长目标/状态/提示在窄屏容易互相挤压。")
-    if 'name="TopBar" type="GridContainer"' in scene and "top_bar.columns = 1 if compact else" not in hud:
+    has_compact_top_bar_columns = re.search(r"\.columns\s*=\s*1\s+if\s+compact\s+else", ui_code) is not None
+    if 'name="TopBar" type="GridContainer"' in scene and not has_compact_top_bar_columns:
         concerns.append("TopBar 已使用 GridContainer，但未发现运行时按窄屏切换列数。")
 
     for label_name in ["ObjectiveLabel", "StatusLabel", "HintLabel"]:
@@ -327,19 +334,19 @@ def _check_hud_responsive_layout() -> None:
             concerns.append(f"未找到 {label_name}。")
             continue
         block = match.group(0)
-        if "autowrap_mode" not in block and f"{label_name.lower()}" not in hud.lower():
+        if "autowrap_mode" not in block and f"{label_name.lower()}" not in ui_code.lower():
             concerns.append(f"{label_name} 未发现 autowrap 或脚本压缩策略。")
 
     if "set_gameplay_mode" not in hud:
         concerns.append("Hud.gd 缺少玩法模式降级接口，中心大提示可能在实机玩法中长期遮挡操作区。")
-    if "_fit_text" not in hud:
+    if "_fit_text" not in ui_code and "HUD_THEME.fit_text" not in ui_code:
         concerns.append("Hud.gd 缺少长文本压缩策略，状态/目标文案变长后可能溢出。")
-    if "size_changed.connect" not in hud:
-        concerns.append("Hud.gd 未监听 viewport size_changed，浏览器缩放后布局可能不更新。")
+    if "size_changed.connect" not in ui_code:
+        concerns.append("HUD UI 代码未监听 viewport size_changed，浏览器缩放后布局可能不更新。")
     project = safe_read(PROJECT_ROOT / "project.godot")
     uses_expand_stretch = 'window/stretch/mode="canvas_items"' in project and 'window/stretch/aspect="expand"' in project
-    if uses_expand_stretch and ("_layout_width" not in hud or "window_get_size" not in hud):
-        concerns.append("项目使用 canvas_items + expand；Hud.gd 若只读取逻辑 viewport，窄屏浏览器可能仍按桌面宽度布局。")
+    if uses_expand_stretch and ("_layout_width" not in ui_code or "window_get_size" not in ui_code):
+        concerns.append("项目使用 canvas_items + expand；HUD UI 代码若只读取逻辑 viewport，窄屏浏览器可能仍按桌面宽度布局。")
 
     if issues:
         _add("HUD 响应式布局", "FAIL", "；".join(issues + concerns))

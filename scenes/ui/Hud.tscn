@@ -1,0 +1,1321 @@
+[gd_scene format=3 uid="uid://crffkletdwi4m"]
+
+[ext_resource type="Script" uid="uid://bemwqr86i4afu" path="res://src/ui/Hud.gd" id="3"]
+[ext_resource type="Script" uid="uid://edwaihq1ndoj" path="res://src/ui/DefenseWallPanelArt.gd" id="5"]
+[ext_resource type="Script" path="res://src/ui/HudShieldIconLabel.gd" id="8"]
+[ext_resource type="Script" uid="uid://bwjwwm7x0i45r" path="res://src/ui/StagingPanelArt.gd" id="6"]
+[ext_resource type="Script" uid="uid://dqkt2br3iej2s" path="res://src/ui/SmallHeroIcon.gd" id="4"]
+
+[node name="Hud" type="CanvasLayer" unique_id=1132585759]
+layer = 10
+script = ExtResource("3")
+
+[node name="Root" type="Control" parent="." unique_id=1700917974]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="Root" unique_id=847254021]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 12
+
+[node name="MainLayout" type="VBoxContainer" parent="Root/SafeMargin" unique_id=430570010]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopBar" type="GridContainer" parent="Root/SafeMargin/MainLayout" unique_id=1988985399]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="PauseButton" type="Button" parent="Root/SafeMargin/MainLayout/TopBar" unique_id=1711982366]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+text = "Ⅱ"
+
+[node name="TimePanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout/TopBar" unique_id=75254569]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeLabel" type="Label" parent="Root/SafeMargin/MainLayout/TopBar/TimePanel" unique_id=491282944]
+unique_name_in_owner = true
+layout_mode = 2
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StagePanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout/TopBar" unique_id=1960809752]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StageLabel" type="Label" parent="Root/SafeMargin/MainLayout/TopBar/StagePanel" unique_id=1592983495]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1-1 教堂广场"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="WavePanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout/TopBar" unique_id=1783373046]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(178, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WaveLabel" type="Label" parent="Root/SafeMargin/MainLayout/TopBar/WavePanel" unique_id=1932259285]
+unique_name_in_owner = true
+layout_mode = 2
+text = "波次: 1/20"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ExpPanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout" unique_id=1558162056]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="ExpRow" type="Control" parent="Root/SafeMargin/MainLayout/ExpPanel" unique_id=1820333877]
+layout_mode = 2
+
+[node name="LevelTitleLabel" type="Label" parent="Root/SafeMargin/MainLayout/ExpPanel/ExpRow" unique_id=1443301767]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ExpBar" type="ProgressBar" parent="Root/SafeMargin/MainLayout/ExpPanel/ExpRow" unique_id=1225463406]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 6.0
+offset_right = -88.0
+offset_bottom = 28.0
+grow_horizontal = 2
+max_value = 60.0
+value = 60.0
+show_percentage = false
+
+[node name="LevelValueLabel" type="Label" parent="Root/SafeMargin/MainLayout/ExpPanel/ExpRow" unique_id=1141497572]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(58, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_right = 40.0
+offset_bottom = 24.0
+grow_horizontal = 2
+text = "1级"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ExpValueLabel" type="Label" parent="Root/SafeMargin/MainLayout/ExpPanel/ExpRow" unique_id=765165618]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(76, 0)
+layout_mode = 1
+text = "60/60"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="BattlefieldFrame" type="Control" parent="Root/SafeMargin/MainLayout" unique_id=114167752]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 900)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ObjectivePanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout/BattlefieldFrame" unique_id=1171351291]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 470.0
+offset_bottom = 54.0
+
+[node name="ObjectiveLabel" type="Label" parent="Root/SafeMargin/MainLayout/BattlefieldFrame/ObjectivePanel" unique_id=1103938339]
+unique_name_in_owner = true
+layout_mode = 2
+text = "守住城墙"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="AmmoPanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout/BattlefieldFrame" unique_id=800597585]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -119.0
+offset_top = 78.0
+offset_right = -14.0
+offset_bottom = 104.0
+grow_horizontal = 0
+
+[node name="AmmoLayout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/BattlefieldFrame/AmmoPanel" unique_id=667202981]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="AmmoValueLabel" type="Label" parent="Root/SafeMargin/MainLayout/BattlefieldFrame/AmmoPanel/AmmoLayout" unique_id=596373852]
+unique_name_in_owner = true
+layout_mode = 2
+text = "30/30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TargetingHintLabel" type="Label" parent="Root/SafeMargin/MainLayout/BattlefieldFrame" unique_id=148671049]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 390.0
+offset_top = 380.0
+offset_right = 690.0
+offset_bottom = 424.0
+text = "Target"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StatusLabel" type="Label" parent="Root/SafeMargin/MainLayout/BattlefieldFrame" unique_id=2027364332]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 22.0
+offset_top = 844.0
+offset_right = 520.0
+offset_bottom = 884.0
+text = "Status"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DefenseWallPanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout" unique_id=367841646]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+script = ExtResource("5")
+
+[node name="DefenseWallLabel" type="Label" parent="Root/SafeMargin/MainLayout/DefenseWallPanel" unique_id=1953738663]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "城墙"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WallHpPanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout" unique_id=432892974]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="WallHpRow" type="HBoxContainer" parent="Root/SafeMargin/MainLayout/WallHpPanel" unique_id=1405558832]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="WallHpTitleLabel" type="Label" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow" unique_id=378722515]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="WallHpBar" type="ProgressBar" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow" unique_id=771903916]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 3000.0
+value = 3000.0
+show_percentage = false
+
+[node name="WallHpStatsColumn" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow" unique_id=1853693844]
+custom_minimum_size = Vector2(114, 0)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 0
+
+[node name="ShieldRow" type="HBoxContainer" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn" unique_id=2100243844]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ShieldIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn/ShieldRow" unique_id=1064301333]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+script = ExtResource("8")
+text = "◆"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShieldValueLabel" type="Label" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn/ShieldRow" unique_id=1796590628]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 0)
+layout_mode = 2
+text = "0"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="WallHpValueRow" type="HBoxContainer" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn" unique_id=273102784]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="WallHpIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn/WallHpValueRow" unique_id=1241909839]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "♥"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WallHpValueLabel" type="Label" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn/WallHpValueRow" unique_id=1584618659]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 0)
+layout_mode = 2
+text = "3000"
+horizontal_alignment = 0
+vertical_alignment = 1
+
+[node name="WallHpBalanceSpacer" type="Control" parent="Root/SafeMargin/MainLayout/WallHpPanel/WallHpRow/WallHpStatsColumn" unique_id=1036622351]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+
+[node name="HeroStatusPanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout" unique_id=1304332395]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 190)
+layout_mode = 2
+script = ExtResource("6")
+
+[node name="HeroStatusLayout" type="Control" parent="Root/SafeMargin/MainLayout/HeroStatusPanel" unique_id=1610275183]
+layout_mode = 2
+
+[node name="EnergyBadge" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout" unique_id=1425377368]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(128, 132)
+layout_mode = 0
+offset_top = 70.0
+offset_right = 128.0
+offset_bottom = 202.0
+
+[node name="EnergyBadgeLayout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/EnergyBadge" unique_id=1980026686]
+layout_mode = 2
+
+[node name="EnergyTitleLabel" type="Label" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/EnergyBadge/EnergyBadgeLayout" unique_id=856481598]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="EnergyValueLabel" type="Label" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/EnergyBadge/EnergyBadgeLayout" unique_id=845764233]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "3/3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeroCenter" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout" unique_id=563298296]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -78.0
+offset_top = 12.0
+offset_right = 78.0
+offset_bottom = 168.0
+theme_override_constants/separation = 4
+
+[node name="HeroPortraitPanel" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/HeroCenter" unique_id=1380318755]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(118, 100)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="HeroPortraitLabel" type="Label" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/HeroCenter/HeroPortraitPanel" unique_id=362190458]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "人物"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SmallHeroIcon" type="Control" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/HeroCenter/HeroPortraitPanel" unique_id=1494630367]
+custom_minimum_size = Vector2(104, 92)
+layout_mode = 2
+script = ExtResource("4")
+
+[node name="HeroNameLabel" type="Label" parent="Root/SafeMargin/MainLayout/HeroStatusPanel/HeroStatusLayout/HeroCenter" unique_id=23869107]
+unique_name_in_owner = true
+layout_mode = 2
+text = "艾琳"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HandArea" type="PanelContainer" parent="Root/SafeMargin/MainLayout" unique_id=743132036]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+
+[node name="HandAreaRoot" type="Control" parent="Root/SafeMargin/MainLayout/HandArea" unique_id=1707858396]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HandLayer" type="Control" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot" unique_id=47905195]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="UltimateLayout" type="HBoxContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=257145721]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 55.0
+offset_top = 4.0
+offset_right = 1048.0
+offset_bottom = 62.0
+theme_override_constants/separation = 0
+
+[node name="UltimateCostBadge" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout" unique_id=128640226]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="UltimateCostLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateCostBadge" unique_id=638755229]
+unique_name_in_owner = true
+layout_mode = 2
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UltimateTitleLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout" unique_id=1326898270]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="UltimateBar" type="ProgressBar" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout" unique_id=997236156]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+value = 45.0
+show_percentage = false
+
+[node name="UltimateBarSplit1" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=858852772]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.1
+anchor_right = 0.1
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit2" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=1794651939]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.2
+anchor_right = 0.2
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit3" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=932584752]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_right = 0.3
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit4" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=1966386470]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit5" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=787276711]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit6" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=872472059]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_right = 0.6
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit7" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=1127610432]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.7
+anchor_right = 0.7
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit8" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=799111052]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_right = 0.8
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="UltimateBarSplit9" type="ColorRect" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout/UltimateBar" unique_id=1658351147]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.9
+anchor_right = 0.9
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.06, 0.035, 0.12, 0.68)
+
+[node name="HintLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/UltimateLayout" unique_id=611423271]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DiscardHandButton" type="Button" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=1962212100]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 48)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 82.0
+offset_right = 128.0
+offset_bottom = 130.0
+text = "弃牌"
+
+[node name="DiscardPileButton" type="Button" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=1023814935]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(78, 104)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 286.0
+offset_right = 90.0
+offset_bottom = 390.0
+text = "弃牌堆"
+
+[node name="DrawPileButton" type="Button" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=1970680064]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(78, 104)
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -90.0
+offset_top = 286.0
+offset_right = -12.0
+offset_bottom = 390.0
+text = "牌库"
+
+[node name="Card1" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=83893280]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 255)
+layout_mode = 0
+offset_left = 126.0
+offset_top = 128.0
+offset_right = 276.0
+offset_bottom = 383.0
+rotation = -0.12
+pivot_offset = Vector2(75, 127.5)
+
+[node name="Card1Body" type="Control" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1" unique_id=1967956831]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card1CostLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Body" unique_id=97764968]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card1ArtLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Body" unique_id=1555968536]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 62.0
+offset_right = 138.0
+offset_bottom = 142.0
+text = "技"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card1NameLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Body" unique_id=724850294]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 142.0
+offset_bottom = 34.0
+text = "卡牌一"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card1TypeLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Body" unique_id=2127308335]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 34.0
+offset_right = 142.0
+offset_bottom = 56.0
+text = "类型"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card1DescLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Body" unique_id=2130212742]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 160.0
+offset_right = 134.0
+offset_bottom = 221.0
+text = "运行时显示卡牌效果"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card1SchoolIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Body" unique_id=2129903333]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 218.0
+offset_right = 92.0
+offset_bottom = 248.0
+text = "系"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card1Margin" type="MarginContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1" unique_id=1495199317]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Card1Layout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card1/Card1Margin" unique_id=1109568070]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Card2" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=2069763308]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 255)
+layout_mode = 0
+offset_left = 290.0
+offset_top = 104.0
+offset_right = 440.0
+offset_bottom = 359.0
+rotation = -0.06
+pivot_offset = Vector2(75, 127.5)
+
+[node name="Card2Body" type="Control" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2" unique_id=1167320415]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card2CostLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Body" unique_id=1476741298]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card2ArtLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Body" unique_id=2009939832]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 62.0
+offset_right = 138.0
+offset_bottom = 142.0
+text = "技"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card2NameLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Body" unique_id=43967046]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 142.0
+offset_bottom = 34.0
+text = "卡牌二"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2TypeLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Body" unique_id=690780024]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 34.0
+offset_right = 142.0
+offset_bottom = 56.0
+text = "类型"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card2DescLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Body" unique_id=541477366]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 160.0
+offset_right = 134.0
+offset_bottom = 221.0
+text = "运行时显示卡牌效果"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card2SchoolIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Body" unique_id=1311119346]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 218.0
+offset_right = 92.0
+offset_bottom = 248.0
+text = "系"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card2Margin" type="MarginContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2" unique_id=834015531]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Card2Layout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card2/Card2Margin" unique_id=1578401078]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Card3" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=292010248]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 255)
+layout_mode = 0
+offset_left = 465.0
+offset_top = 94.0
+offset_right = 615.0
+offset_bottom = 349.0
+pivot_offset = Vector2(75, 127.5)
+
+[node name="Card3Body" type="Control" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3" unique_id=543747108]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card3CostLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Body" unique_id=496914523]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card3ArtLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Body" unique_id=196277909]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 62.0
+offset_right = 138.0
+offset_bottom = 142.0
+text = "技"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card3NameLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Body" unique_id=1135711299]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 142.0
+offset_bottom = 34.0
+text = "卡牌三"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3TypeLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Body" unique_id=1498871978]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 34.0
+offset_right = 142.0
+offset_bottom = 56.0
+text = "类型"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card3DescLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Body" unique_id=460791853]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 160.0
+offset_right = 134.0
+offset_bottom = 221.0
+text = "运行时显示卡牌效果"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card3SchoolIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Body" unique_id=1435034539]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 218.0
+offset_right = 92.0
+offset_bottom = 248.0
+text = "系"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card3Margin" type="MarginContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3" unique_id=346819380]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Card3Layout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card3/Card3Margin" unique_id=1173256759]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Card4" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=1103791506]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 255)
+layout_mode = 0
+offset_left = 630.0
+offset_top = 104.0
+offset_right = 780.0
+offset_bottom = 359.0
+rotation = 0.06
+pivot_offset = Vector2(75, 127.5)
+
+[node name="Card4Body" type="Control" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4" unique_id=2065322951]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card4CostLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Body" unique_id=1708061257]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card4ArtLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Body" unique_id=1263062820]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 62.0
+offset_right = 138.0
+offset_bottom = 142.0
+text = "技"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card4NameLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Body" unique_id=941593694]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 142.0
+offset_bottom = 34.0
+text = "卡牌四"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4TypeLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Body" unique_id=801896675]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 34.0
+offset_right = 142.0
+offset_bottom = 56.0
+text = "类型"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card4DescLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Body" unique_id=37871396]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 160.0
+offset_right = 134.0
+offset_bottom = 221.0
+text = "运行时显示卡牌效果"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card4SchoolIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Body" unique_id=448058236]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 218.0
+offset_right = 92.0
+offset_bottom = 248.0
+text = "系"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card4Margin" type="MarginContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4" unique_id=1029851952]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Card4Layout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card4/Card4Margin" unique_id=119167456]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Card5" type="PanelContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=1794054578]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 255)
+layout_mode = 0
+offset_left = 794.0
+offset_top = 128.0
+offset_right = 944.0
+offset_bottom = 383.0
+rotation = 0.12
+pivot_offset = Vector2(75, 127.5)
+
+[node name="Card5Body" type="Control" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5" unique_id=281920709]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card5CostLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Body" unique_id=843100244]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card5ArtLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Body" unique_id=71137613]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 62.0
+offset_right = 138.0
+offset_bottom = 142.0
+text = "技"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card5NameLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Body" unique_id=1057592018]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 142.0
+offset_bottom = 34.0
+text = "卡牌五"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card5TypeLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Body" unique_id=740170226]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 38.0
+offset_top = 34.0
+offset_right = 142.0
+offset_bottom = 56.0
+text = "类型"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card5DescLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Body" unique_id=1391457305]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 160.0
+offset_right = 134.0
+offset_bottom = 221.0
+text = "运行时显示卡牌效果"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Card5SchoolIconLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Body" unique_id=170343573]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 218.0
+offset_right = 92.0
+offset_bottom = 248.0
+text = "系"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card5Margin" type="MarginContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5" unique_id=1915797370]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Card5Layout" type="VBoxContainer" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer/Card5/Card5Margin" unique_id=1038836095]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="BottomToastLabel" type="Label" parent="Root/SafeMargin/MainLayout/HandArea/HandAreaRoot/HandLayer" unique_id=1488815372]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 170.0
+offset_top = 392.0
+offset_right = 910.0
+offset_bottom = 424.0
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="MainMenuOverlay" type="Control" parent="Root" unique_id=1012809547]
+unique_name_in_owner = true
+z_index = 900
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainMenuShade" type="ColorRect" parent="Root/MainMenuOverlay" unique_id=211154694]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.018, 0.016, 0.86)
+
+[node name="MainMenuCenter" type="CenterContainer" parent="Root/MainMenuOverlay" unique_id=181166056]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="MainMenuPanel" type="PanelContainer" parent="Root/MainMenuOverlay/MainMenuCenter" unique_id=1907878535]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 300)
+layout_mode = 2
+
+[node name="MainMenuMargin" type="MarginContainer" parent="Root/MainMenuOverlay/MainMenuCenter/MainMenuPanel" unique_id=848156744]
+layout_mode = 2
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 30
+
+[node name="MainMenuLayout" type="VBoxContainer" parent="Root/MainMenuOverlay/MainMenuCenter/MainMenuPanel/MainMenuMargin" unique_id=2077035517]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="MainMenuTitleLabel" type="Label" parent="Root/MainMenuOverlay/MainMenuCenter/MainMenuPanel/MainMenuMargin/MainMenuLayout" unique_id=1916412359]
+unique_name_in_owner = true
+layout_mode = 2
+text = "教堂广场防线"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MainMenuSummaryLabel" type="Label" parent="Root/MainMenuOverlay/MainMenuCenter/MainMenuPanel/MainMenuMargin/MainMenuLayout" unique_id=555549317]
+unique_name_in_owner = true
+layout_mode = 2
+text = "守住城墙，撑过来袭波次。"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="StartGameButton" type="Button" parent="Root/MainMenuOverlay/MainMenuCenter/MainMenuPanel/MainMenuMargin/MainMenuLayout" unique_id=1036899190]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+text = "开始游戏"
+
+[node name="PauseOverlay" type="Control" parent="Root" unique_id=1894265320]
+unique_name_in_owner = true
+visible = false
+z_index = 900
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseShade" type="ColorRect" parent="Root/PauseOverlay" unique_id=344397545]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.018, 0.014, 0.68)
+
+[node name="PauseRewardBand" type="ColorRect" parent="Root/PauseOverlay" unique_id=1577193957]
+layout_mode = 0
+anchor_top = 0.235
+anchor_right = 1.0
+anchor_bottom = 0.490
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.82, 0.82, 0.78, 0.44)
+
+[node name="PauseCenter" type="Control" parent="Root/PauseOverlay" unique_id=584071832]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="PausePanel" type="Control" parent="Root/PauseOverlay/PauseCenter" unique_id=97489399]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseTitleLabel" type="Label" parent="Root/PauseOverlay/PauseCenter/PausePanel" unique_id=841543660]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 330.0
+offset_right = 1080.0
+offset_bottom = 398.0
+text = "暂停"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseSummaryLabel" type="Label" parent="Root/PauseOverlay/PauseCenter/PausePanel" unique_id=1945595536]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 436.0
+offset_right = 1080.0
+offset_bottom = 482.0
+text = "已获得奖励"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="PauseRewardSpacer" type="Control" parent="Root/PauseOverlay/PauseCenter/PausePanel" unique_id=1176986912]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 482.0
+offset_right = 1080.0
+offset_bottom = 940.0
+mouse_filter = 2
+
+[node name="PauseActions" type="HBoxContainer" parent="Root/PauseOverlay/PauseCenter/PausePanel" unique_id=784136344]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(730, 78)
+layout_mode = 0
+offset_left = 175.0
+offset_top = 1210.0
+offset_right = 905.0
+offset_bottom = 1288.0
+theme_override_constants/separation = 90
+
+[node name="ExitButton" type="Button" parent="Root/PauseOverlay/PauseCenter/PausePanel/PauseActions" unique_id=985845001]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 78)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "退出"
+
+[node name="ContinueButton" type="Button" parent="Root/PauseOverlay/PauseCenter/PausePanel/PauseActions" unique_id=1866537313]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 78)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "继续战斗"
+
+[node name="ResultOverlay" type="Control" parent="Root" unique_id=2049072354]
+unique_name_in_owner = true
+visible = false
+z_index = 900
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResultShade" type="ColorRect" parent="Root/ResultOverlay" unique_id=617976328]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.018, 0.016, 0.56)
+
+[node name="ResultRewardBand" type="ColorRect" parent="Root/ResultOverlay" unique_id=1176577795]
+layout_mode = 0
+anchor_top = 0.235
+anchor_right = 1.0
+anchor_bottom = 0.490
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.82, 0.82, 0.78, 0.44)
+
+[node name="ResultCenter" type="Control" parent="Root/ResultOverlay" unique_id=89082795]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ResultPanel" type="Control" parent="Root/ResultOverlay/ResultCenter" unique_id=341439931]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ResultTitleLabel" type="Label" parent="Root/ResultOverlay/ResultCenter/ResultPanel" unique_id=228433445]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 330.0
+offset_right = 1080.0
+offset_bottom = 402.0
+text = "挑战失败"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResultSummaryLabel" type="Label" parent="Root/ResultOverlay/ResultCenter/ResultPanel" unique_id=643343812]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 445.0
+offset_right = 1080.0
+offset_bottom = 493.0
+text = "已获得奖励"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ResultStatsLabel" type="Label" parent="Root/ResultOverlay/ResultCenter/ResultPanel" unique_id=793691650]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 749.0
+offset_right = 1080.0
+offset_bottom = 821.0
+text = "城墙已被突破"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="ResultRewardSpacer" type="Control" parent="Root/ResultOverlay/ResultCenter/ResultPanel" unique_id=1644882920]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+
+[node name="ResultReturnButton" type="Button" parent="Root/ResultOverlay/ResultCenter/ResultPanel" unique_id=732137493]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 78)
+layout_mode = 0
+offset_left = 175.0
+offset_top = 1210.0
+offset_right = 495.0
+offset_bottom = 1288.0
+text = "返回"
+
+[node name="ResultRetryButton" type="Button" parent="Root/ResultOverlay/ResultCenter/ResultPanel" unique_id=787709059]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 78)
+layout_mode = 0
+offset_left = 585.0
+offset_top = 1210.0
+offset_right = 905.0
+offset_bottom = 1288.0
+text = "再来一局"

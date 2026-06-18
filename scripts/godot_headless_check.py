@@ -8,9 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -22,8 +20,10 @@ if hasattr(sys.stderr, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-GODOT_ENV_KEY = "GODOT4_PATH"
 DEFAULT_SCENE = "res://scenes/Game.tscn"
+
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from godot_locator import find_godot  # noqa: E402
 
 BLOCKING_PATTERNS = (
     "SCRIPT ERROR",
@@ -38,49 +38,6 @@ IGNORED_PATTERNS = (
     "WARNING:",
     "trying to play a sample from a stream that cannot be sampled",
 )
-
-
-def _sort_godot_exec_paths(paths: list[Path]) -> list[str]:
-    dedup: list[str] = []
-    seen: set[str] = set()
-    for path in paths:
-        if not path.is_file():
-            continue
-        text = str(path)
-        key = text.lower()
-        if key in seen:
-            continue
-        seen.add(key)
-        dedup.append(text)
-    return sorted(
-        dedup,
-        key=lambda value: (
-            0 if "console" in Path(value).name.lower() else 1,
-            Path(value).name.lower(),
-            value.lower(),
-        ),
-    )
-
-
-def find_godot(hint: str = "") -> str | None:
-    candidates: list[str] = []
-    if hint:
-        candidates.append(hint)
-    env = os.environ.get(GODOT_ENV_KEY)
-    if env:
-        candidates.append(env)
-    for root in [PROJECT_ROOT / "tools" / "godot", PROJECT_ROOT / "tools"]:
-        if root.exists():
-            candidates += _sort_godot_exec_paths([
-                *root.rglob("Godot*.exe"),
-                *root.rglob("godot*.exe"),
-            ])
-    candidates += ["godot4", "godot"]
-    for candidate in candidates:
-        resolved = shutil.which(candidate) or (Path(candidate).is_file() and candidate)
-        if resolved:
-            return str(resolved)
-    return None
 
 
 def _blocking_lines(text: str) -> list[str]:
@@ -108,6 +65,7 @@ def _powershell_quote(value: str) -> str:
 
 def _headless_command(godot: str, scene: str, frames: int) -> list[str]:
     if sys.platform == "win32":
+        import shutil
         shell = shutil.which("powershell")
         if shell:
             ps_command = " ".join([

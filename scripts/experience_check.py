@@ -828,6 +828,56 @@ def _check_browser_runtime_agent(url: str) -> bool:
     return True
 
 
+def _check_native_runtime_fallback() -> bool:
+    script = PROJECT_ROOT / "scripts" / "godot_native_screenshot_check.py"
+    if not script.exists():
+        _add_check(
+            "原生截图降级",
+            "CONCERNS",
+            "Playwright/agent-browser 不可用，且缺少 Godot 原生截图检查脚本。",
+        )
+        return False
+
+    ok, text = _run([sys.executable, str(script), "--json"], timeout=90)
+    parsed = _parse_json(text)
+    if not parsed:
+        _add_check(
+            "原生截图降级",
+            "CONCERNS" if ok else "FAIL",
+            text or "Godot 原生截图检查没有可解析输出。",
+        )
+        return False
+
+    status = str(parsed.get("status") or ("PASS" if ok else "FAIL"))
+    screenshot_items = parsed.get("screenshots") or {}
+    if isinstance(screenshot_items, dict):
+        for label, path in screenshot_items.items():
+            if path:
+                screenshots[f"native-{label}"] = str(path)
+
+    screenshot_dir_detail = str(parsed.get("screenshot_dir") or "")
+    issues = [
+        f"{item.get('name')}: {item.get('detail')}"
+        for item in parsed.get("checks", [])
+        if item.get("status") in {"FAIL", "CONCERNS"}
+    ]
+    if status == "PASS":
+        _add_check(
+            "原生截图降级",
+            "PASS",
+            "Playwright/agent-browser 不可用，已改用 Godot 原生运行截图作为可见性证据。"
+            f"截图目录：{screenshot_dir_detail}",
+        )
+        return True
+
+    _add_check(
+        "原生截图降级",
+        status,
+        "；".join(issues) if issues else text[-1200:],
+    )
+    return False
+
+
 def _check_browser_runtime(url: str) -> None:
     if BROWSER_BACKEND == "none":
         _add_check("浏览器运行时", "CONCERNS", "已按 --browser-backend none 跳过浏览器自动化。")
@@ -844,9 +894,14 @@ def _check_browser_runtime(url: str) -> None:
             return
 
     if BROWSER_BACKEND in {"auto", "agent-browser"}:
+        snapshot = _capture_report_state() if BROWSER_BACKEND == "auto" else None
         if _check_browser_runtime_agent(url):
             return
         if BROWSER_BACKEND == "auto":
+            if snapshot is not None:
+                _restore_report_state(snapshot)
+            if _check_native_runtime_fallback():
+                return
             _add_check("浏览器运行时", "CONCERNS", "Playwright 和 agent-browser 均不可用或运行失败。")
 
 

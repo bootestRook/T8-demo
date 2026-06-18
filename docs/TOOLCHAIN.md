@@ -54,6 +54,24 @@ tools/python/python.exe scripts/check_env.py --json --fast
 tools/python/python.exe scripts/ai_review.py --strict
 ```
 
+## Windows PowerShell 中文输入
+
+PowerShell 控制台显示乱码不一定代表文件损坏，但 PowerShell 管道、`echo`、未指定编码的重定向和长命令行参数可能把中文正文不可逆替换成 `?`。项目内涉及中文提示词、JSON、Markdown、CSV、策划文档或 UI 文案时，不把正文通过管道传给 Python/Godot/媒体生成脚本。
+
+稳定做法：
+
+- 多行提示词、JSON 和额外请求体先写入 UTF-8 文件，再通过 `--prompt-file`、`--options-file`、`--extra-body-file` 或脚本文件参数读取。
+- PowerShell 写文件时显式使用 `Set-Content -Encoding UTF8` 或 `Out-File -Encoding utf8`；由 Python 写文件时使用 `Path.write_text(..., encoding="utf-8")`。
+- 如果必须在命令行内嵌少量中文，优先使用 `\uXXXX` Unicode 转义，并在脚本内还原。
+- 发现文本出现连续半角问号或中文上下文被半角问号替代时，视为源内容已损坏，必须回到原始输入或 UTF-8 文件重建，不能在问号文本上继续修补。
+
+统一检查：
+
+```bash
+python scripts/encoding_review.py --json
+python scripts/ai_review.py --strict
+```
+
 `init` 默认使用 `check_env.py --fast`，只做快速可用性检查；交付前由 `ai_review.py` 执行完整环境、体验结构、导出和浏览器体验检查。
 
 `Node.js` 是可选但推荐的 AI 工具链基础依赖。把官方 Windows zip 放入 `tools/` 后，`init.cmd` 会自动解包到 `tools/node/`，`check_env.py` 会检测 `node`、`npm`、`npx`。GodotMCP、部分浏览器工具、UI/PSD 工具或未来 Node CLI 都优先使用 `tools/node/`，再回退系统 PATH。

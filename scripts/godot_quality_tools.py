@@ -43,6 +43,9 @@ GDUNIT_TEST_ROOTS = (
 checks: list[dict[str, str]] = []
 final_status = "PASS"
 
+sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
+from godot_locator import find_godot  # noqa: E402
+
 
 def _run(command: list[str], timeout: int = 180, env: dict[str, str] | None = None) -> tuple[int, str]:
     try:
@@ -127,25 +130,7 @@ def _sort_godot_exec_paths(paths: list[Path]) -> list[str]:
 
 
 def _find_godot(hint: str = "") -> str | None:
-    candidates: list[str] = []
-    if hint:
-        candidates.append(hint)
-    env = os.environ.get(GODOT_ENV_KEY)
-    if env:
-        candidates.append(env)
-    for root in (PROJECT_ROOT / "tools" / "godot", PROJECT_ROOT / "tools"):
-        if root.exists():
-            candidates += _sort_godot_exec_paths([
-                *root.rglob("Godot*.exe"),
-                *root.rglob("godot*.exe"),
-            ])
-    candidates += ["godot4", "godot"]
-
-    for candidate in candidates:
-        resolved = shutil.which(candidate) or (Path(candidate).is_file() and candidate)
-        if resolved:
-            return str(resolved)
-    return None
+    return find_godot(hint)
 
 
 def _gdscript_files() -> list[Path]:

@@ -1,0 +1,8 @@
+﻿monster_id,name,type,type_name,model,hp,attack,speed,attack_interval,exp,radius,skill_id,skill_name,skill_params,freeze_mul,paralyze_mul,comment
+10,基础小怪,normal,小怪,monster_grunt,180,10,56,1.4,16,24,melee_wall_hit,啃咬城墙,"{""damage_type"":""physical""}",1.0,1.0,基础近战怪，数量压力来源
+20,进阶小怪,normal,小怪,monster_advanced,280,13,48,1.35,22,27,melee_wall_hit,强化啃咬,"{""damage_type"":""physical""}",1.0,1.0,中期主力怪，血量高于基础小怪
+30,重型小怪,tank,小怪,monster_tank,520,21,32,1.8,42,34,heavy_wall_hit,重击城墙,"{""damage_type"":""physical"",""armor"":1}",0.9,0.9,重型压力怪，当前关卡预留
+100,快速怪,fast,小怪,monster_runner,140,8,92,1.0,18,21,quick_wall_hit,快速撕咬,"{""damage_type"":""physical""}",1.0,1.0,早期速度压力怪
+150,强化怪,elite,精英,monster_enhanced,1040,26,36,1.5,72,38,elite_wall_hit,强化冲击,"{""damage_type"":""physical"",""priority"":""elite""}",0.85,0.85,1005关卡中后期精英压力
+3030,精英怪,elite,精英,monster_elite,1300,29,28,1.8,110,42,elite_wall_hit,精英重压,"{""damage_type"":""physical"",""priority"":""elite""}",0.8,0.8,参考表1004使用，保留给后续关卡
+5000,Boss,boss,首领,monster_boss_cathedral,3600,44,20,2.0,300,58,boss_wall_crush,首领压制,"{""damage_type"":""physical"",""priority"":""boss""}",0.65,0.65,1005特殊波次首领

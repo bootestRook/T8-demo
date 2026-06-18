@@ -54,7 +54,6 @@ res://
       card_runtime.gd
       card_effect_executor.gd
       chain_controller.gd
-      same_name_cooldown_controller.gd
     gun/
       player_gun.gd
       bullet_runtime.gd
@@ -98,7 +97,6 @@ BattleRoot (Node2D)
   LevelController
   DeckController
   ChainController
-  SameNameCooldownController
 
   World (Node2D)
     MonsterLayer (Node2D)
@@ -123,7 +121,6 @@ BattleRoot (Node2D)
 | `DamageService` | 统一处理伤害、击退、死亡、经验掉落 |
 | `DeckController` | 手牌、牌库、弃牌、补牌、弃牌按钮 |
 | `ChainController` | 连锁倍率计算 |
-| `SameNameCooldownController` | 同名卡连续释放冷却 |
 | `CardEffectExecutor` | 解析卡牌效果，分发到核心技能执行器 |
 | `PlayerGun` | 自动射击、弹匣、换弹、枪械升级应用 |
 

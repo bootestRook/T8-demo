@@ -56,6 +56,7 @@ REVIEW_DIMENSIONS = {
         "PowerShell 语法",
         "OpenCode 插件语法",
         "文档路由",
+        "UTF-8 编码策略",
         "PM 状态源",
         "PM 一致性",
         "项目地图",
@@ -292,6 +293,29 @@ def _check_document_routes() -> None:
         "FAIL" if missing else "PASS",
         "；".join(missing) if missing else "skill 路由和脚本命令均指向存在的文件。",
     )
+
+
+def _check_encoding_policy() -> None:
+    script = PROJECT_ROOT / "scripts" / "encoding_review.py"
+    if not script.exists():
+        _add("UTF-8 编码策略", "FAIL", "未找到 scripts/encoding_review.py。")
+        return
+    ok, text = _run([sys.executable, str(script), "--json"], timeout=60)
+    data = _parse_json(text)
+    if not data:
+        _add("UTF-8 编码策略", "FAIL" if not ok else "CONCERNS", text or "无法解析编码检查输出。")
+        return
+    status = str(data.get("status") or ("PASS" if ok else "FAIL"))
+    issues = [
+        f"{item.get('path')}: {item.get('issue')}"
+        for item in data.get("issues", [])
+        if isinstance(item, dict)
+    ]
+    checked = data.get("checked") or {}
+    detail = "；".join(issues[:8]) if issues else (
+        f"文本文件 {checked.get('text_files')} 个、Excel CSV {checked.get('excel_csv_files')} 个编码检查通过。"
+    )
+    _add("UTF-8 编码策略", status, detail)
 
 
 def _roles_from_script(path: Path) -> set[str]:
@@ -637,11 +661,6 @@ def _check_template_export() -> None:
         "scripts/godot_mcp_stdio.sh": "missing GodotMCP POSIX stdio wrapper",
         "scripts/setup_ai_mcp.py": "missing AI MCP setup script",
         "spec/quality_tools.json": "missing quality tools manifest",
-        "tools/godot-mcp-node/node_modules/@coding-solo/godot-mcp/build/index.js": (
-            "missing bundled Coding-Solo GodotMCP package; run "
-            "python scripts/setup_godot_mcp.py --provider coding-solo --install-coding-solo --yes "
-            "after confirming network access"
-        ),
     }
     included_set = set(included)
     for path, message in required_out_of_box.items():
@@ -799,6 +818,7 @@ def main() -> int:
     _check_powershell_parse()
     _check_opencode_plugin_syntax()
     _check_document_routes()
+    _check_encoding_policy()
     _check_multi_agent_contract()
     _check_runtime_hygiene()
     _check_gameplay_logic()
