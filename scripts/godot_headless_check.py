@@ -24,6 +24,7 @@ DEFAULT_SCENE = "res://scenes/Game.tscn"
 
 sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
 from godot_locator import find_godot  # noqa: E402
+import validate_data_configs  # noqa: E402
 
 BLOCKING_PATTERNS = (
     "SCRIPT ERROR",
@@ -99,6 +100,26 @@ def main() -> int:
     parser.add_argument("--frames", type=int, default=8, help="加载后运行帧数")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
+
+    data_status = validate_data_configs.validate()
+    if data_status["status"] == "FAIL":
+        if args.json:
+            print(json.dumps({
+                "status": "FAIL",
+                "scene": args.scene,
+                "godot": "",
+                "return_code": 1,
+                "return_code_failure": True,
+                "blocking": data_status["errors"][:20],
+            }, ensure_ascii=False, indent=2))
+        else:
+            print("## Godot Headless Check")
+            print("")
+            print("- Result: FAIL")
+            print("")
+            for item in data_status["errors"][:20]:
+                print(f"- {item}")
+        return 1
 
     godot = find_godot(args.godot)
     if not godot:

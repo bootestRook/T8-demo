@@ -234,10 +234,6 @@ var last_card_acquire_event: Dictionary:
 		level_rewards.last_card_acquire_event = value
 
 
-func _ready() -> void:
-	reset()
-
-
 func reset() -> void:
 	upgrade_rng.randomize()
 	phase = Phase.PLAYING

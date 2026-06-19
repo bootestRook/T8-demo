@@ -33,28 +33,28 @@
         {
           "name": "开始入口",
           "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
-          "any": ["start_round", "_start"]
+          "any": ["start_round", "_start", "_on_main_menu_start_requested", "start_battle_ui"]
         },
         {
           "name": "成功条件",
           "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
-          "any": ["Phase.SUCCESS", "_end_round(Phase.SUCCESS"]
+          "any": ["Phase.SUCCESS", "_end_round(Phase.SUCCESS", "Phase.WON"]
         },
         {
           "name": "失败条件",
           "files": ["src/game/PrototypeState.gd", "scenes/Game.gd"],
-          "any": ["Phase.FAILURE", "fail("]
+          "any": ["Phase.FAILURE", "fail(", "Phase.LOST"]
         },
         {
           "name": "重开路径",
           "files": ["scenes/Game.gd", "src/ui/Hud.gd"],
-          "any": ["_restart", "request_round_restart", "再来", "重开"]
+          "any": ["_restart", "request_round_restart", "再来", "重开", "PrototypeState.reset", "result_retry_button"]
         },
         {
           "name": "输入覆盖",
-          "files": ["scenes/Game.gd", "src/game/Player.gd"],
-          "any": ["KEY_LEFT", "KEY_RIGHT", "ui_left", "ui_right"],
-          "also_any": ["KEY_A", "KEY_D", "KEY_W", "KEY_S"]
+          "files": ["scenes/Game.gd", "src/ui/Hud.gd", "src/game/Player.gd"],
+          "any": ["KEY_LEFT", "KEY_RIGHT", "ui_left", "ui_right", "try_play_hand_card", "_request_card_play"],
+          "also_any": ["KEY_A", "KEY_D", "KEY_W", "KEY_S", "InputEventMouseButton", "_on_card_gui_input"]
         }
       ]
     },

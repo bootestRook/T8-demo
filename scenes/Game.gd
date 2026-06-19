@@ -35,7 +35,6 @@ func _ready() -> void:
 	PrototypeState.state_changed.connect(_on_state_changed)
 	main_menu.start_requested.connect(_on_main_menu_start_requested)
 	hud.main_menu_requested.connect(_show_main_menu)
-	PrototypeState.reset()
 	_show_main_menu()
 	queue_redraw()
 

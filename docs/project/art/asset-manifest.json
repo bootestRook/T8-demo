@@ -1,6 +1,6 @@
 {
-  "concept_id": "starter-template",
-  "status": "ui_card_template_light_v2",
+  "concept_id": "vertical-card-defense-demo",
+  "status": "runtime_art_bound_vertical_card_defense_demo",
   "assets": [
     {
       "id": "card_frame_v1",

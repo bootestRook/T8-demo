@@ -58,3 +58,23 @@ static func card_name_for_index(snapshot: Dictionary, default_cards: Array, inde
 		return "卡牌"
 	var card: Dictionary = cards[index]
 	return String(card.get("name", "卡牌"))
+
+
+static func is_valid_hand_index(index: int, hand_count: int) -> bool:
+	return index >= 0 and index < hand_count
+
+
+static func card_cooldown_remaining(card_widgets: Array, index: int) -> float:
+	if index < 0 or index >= card_widgets.size():
+		return 0.0
+	var widget: Dictionary = card_widgets[index]
+	return maxf(0.0, float(widget.get("cooldown_remaining", 0.0)))
+
+
+static func card_cooldown_message(card_widgets: Array, index: int) -> String:
+	return "冷却%d秒" % ceili(card_cooldown_remaining(card_widgets, index))
+
+
+static func card_play_failure_message(snapshot: Dictionary, messages: Dictionary) -> String:
+	var reason := String(snapshot.get("last_card_play_failure", ""))
+	return String(messages.get(reason, "当前不能出牌"))

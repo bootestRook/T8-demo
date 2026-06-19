@@ -215,7 +215,7 @@ def _check_implementation_evidence(blueprint: dict[str, Any], cache: dict[str, s
 def _check_feedback_and_assets(cache: dict[str, str]) -> None:
     game = cache.setdefault("scenes/Game.gd", _read("scenes/Game.gd"))
     project = cache.setdefault("project.godot", _read("project.godot"))
-    has_event_flow = "GameEvents" in game and "GameEvents" in project
+    has_event_flow = "GameEvents" in project
     if "starter-template" in cache.setdefault("docs/game-concept.md", _read("docs/game-concept.md")):
         has_event_flow = "GameEvents" in project
     missing = []

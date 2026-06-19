@@ -395,7 +395,7 @@ func _card_index_for_panel(panel: PanelContainer) -> int:
 
 
 func _is_valid_hand_index(index: int) -> bool:
-	return index >= 0 and index < _current_hand_count()
+	return HUD_HAND_QUERIES.is_valid_hand_index(index, _current_hand_count())
 
 
 func _is_card_cooling_down(index: int) -> bool:
@@ -405,15 +405,11 @@ func _is_card_cooling_down(index: int) -> bool:
 
 
 func _card_cooldown_remaining(index: int) -> float:
-	if index < 0 or index >= card_widgets.size():
-		return 0.0
-	var widget: Dictionary = card_widgets[index]
-	return maxf(0.0, float(widget.get("cooldown_remaining", 0.0)))
+	return HUD_HAND_QUERIES.card_cooldown_remaining(card_widgets, index)
 
 
 func _card_cooldown_message(index: int) -> String:
-	var seconds := ceili(_card_cooldown_remaining(index))
-	return "冷却%d秒" % seconds
+	return HUD_HAND_QUERIES.card_cooldown_message(card_widgets, index)
 
 
 func _is_card_play_locked() -> bool:
@@ -436,8 +432,7 @@ func _card_name_for_index(index: int) -> String:
 
 
 func _card_play_failure_message() -> String:
-	var reason := String(_snapshot.get("last_card_play_failure", ""))
-	return String(HUD_DEFAULTS.CARD_PLAY_FAILURE_MESSAGES.get(reason, "当前不能出牌"))
+	return HUD_HAND_QUERIES.card_play_failure_message(_snapshot, HUD_DEFAULTS.CARD_PLAY_FAILURE_MESSAGES)
 
 
 func _trigger_invalid_feedback(index: int, message: String) -> void:
